@@ -1,12 +1,13 @@
-import { Router } from "express";
-import studentController from '../controllers/studentControllers.controllers.js';
-const studentRoutes = Router();
+// import { Router } from "express";
+// import studentController from '../controllers/studentControllers.controllers.js';
+// const studentRoutes = Router();
 
-studentRoutes.post('/addnewtask',studentController.addNewTask);
-studentRoutes.get('/gettasks',studentController.getTasks);
-studentRoutes.delete('/deletetask/:id',studentController.deleteTask);
+// studentRoutes.post('/addnewtask',studentController.addNewTask);
+// studentRoutes.get('/gettasks',studentController.getTasks);
+// studentRoutes.put('/updatetask/:id',studentController.updateTask);
+// studentRoutes.delete('/deletetask/:id',studentController.deleteTask);
 
-studentRoutes.get('/getVideos/:task',studentController.getVideosRelatedToTask);
-studentRoutes.get('/getVideo/:id',studentController.getVideo);
+// studentRoutes.get('/getVideos/:task',studentController.getVideosRelatedToTask);
+// studentRoutes.get('/getVideo/:id',studentController.getVideo);
 
-export default studentRoutes;
+// export default studentRoutes;
