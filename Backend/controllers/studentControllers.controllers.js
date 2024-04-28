@@ -1,4 +1,4 @@
-import Studdent from '../models/studentModel.js';
+import Student from '../models/studentModel.js';
 import Task from '../models/taskModel.js';
 
 
@@ -33,10 +33,8 @@ const getTasks = async (req, res) => {
             time.sethours(0,0,0,0);
 
           
-            if(task.createdAt==Date.now()){
+            if(time==current){
                 list.push(task.name);
-            }else{
-                 await Task.findByIdAndDelete(task._id);
             }
         }
 
@@ -51,7 +49,7 @@ const getTasks = async (req, res) => {
 
 };
 
-export const updateTask = async (req, res) => {};
+
 
 
 export const deleteTask = async (req, res) => {};
