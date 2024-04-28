@@ -1,5 +1,5 @@
 import { Router } from "express";
-
+import creatorController from '../controllers/creator.controller.js';
 const creatorRoutes = Router();
 
 creatorRoutes.get('/getVideos',creatorController.getVideos);
