@@ -4,10 +4,14 @@ import connectToMongoDB from './db/connectToMongoDB.js';
 import creatorRoutes from './routes/creatorRoutes.routes.js';
 import studentRoutes from './routes/studentRoutes.routes.js';
 import authRoutes from './routes/authRoutes.routes.js';
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 
 const app = express();
+
+app.use(express.json());
+app.use(cookieParser());
 
 app.get('/', (req, res)  => {
   res.send('Hello World');
