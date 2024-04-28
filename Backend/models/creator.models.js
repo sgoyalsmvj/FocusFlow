@@ -16,7 +16,7 @@ const creatorSchema = new mongoose.Schema({
     },
     videos: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'videos',
+        ref: 'Video',
         default: []
     },
     
