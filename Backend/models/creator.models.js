@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import e from "express";
 
 const creatorSchema = new mongoose.Schema({
   name: {
@@ -17,8 +18,9 @@ const creatorSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  role: {
-    type: enumm["student", "creator"],
+  role:{
+    type:String,
+    enum:['student','creator'],
   },
 });
 

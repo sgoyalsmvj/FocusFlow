@@ -1,5 +1,5 @@
-import Creator from "../models/creator.models";
-import Student from "../models/student.models";
+import Creator from "../models/creator.models.js";
+import Student from "../models/student.models.js";
 
 export const register = async (req, res) => {
     try {

@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 const studentSchema = new mongoose.Schema({
 
@@ -25,8 +26,9 @@ const studentSchema = new mongoose.Schema({
        }
     ], 
     role:{
-        type:enumm['student','creator'],
-    }
+        type:String,
+        enum:['student','creator'],
+    },
 })
 
 studentSchema.pre('save', async function(next){
@@ -46,3 +48,4 @@ studentSchema.methods.generateToken = function () {
   }
 
 const Student = mongoose.model('Student', studentSchema);
+export default Student;
