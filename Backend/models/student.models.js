@@ -22,10 +22,10 @@ const studentSchema = new mongoose.Schema({
         ref: 'Task',
          
        }
-    ] 
-      
-  
-
+    ], 
+    role:{
+        type:String,
+    }
 })
 
 const Student = mongoose.model('Student', studentSchema);

@@ -15,6 +15,9 @@ const creatorSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  role: {
+    type: String,
+  },
 });
 
 const Creator = mongoose.model("Creator", creatorSchema);
