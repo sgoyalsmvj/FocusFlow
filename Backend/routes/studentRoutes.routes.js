@@ -1,5 +1,5 @@
 import { Router } from "express";
-import studentController from '../controllers/student.controller.js';
+import studentController from '../controllers/studentControllers.controllers.js';
 const studentRoutes = Router();
 
 studentRoutes.post('/addnewtask',studentController.addNewTask);
