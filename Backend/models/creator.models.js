@@ -16,7 +16,7 @@ const creatorSchema = new mongoose.Schema({
     required: true,
   },
   role: {
-    type: String,
+    type: enumm["student", "creator"],
   },
 });
 

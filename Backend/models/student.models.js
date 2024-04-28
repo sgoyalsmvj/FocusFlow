@@ -24,7 +24,7 @@ const studentSchema = new mongoose.Schema({
        }
     ], 
     role:{
-        type:String,
+        type:enumm['student','creator'],
     }
 })
 
