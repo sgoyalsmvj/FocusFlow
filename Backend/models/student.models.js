@@ -15,19 +15,16 @@ const studentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    taskarray:[
+    Tasks:[
         {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'task',
+        ref: 'Task',
          
        }
     ] 
       
-    
   
-
-
 
 })
 
-const Student = mongoose.model('students', studentSchema);
+const Student = mongoose.model('Student', studentSchema);
