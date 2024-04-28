@@ -14,12 +14,6 @@ const creatorSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  videos: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Video",
-    },
-  ],
 });
 
 const Creator = mongoose.model("Creator", creatorSchema);
