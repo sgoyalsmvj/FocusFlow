@@ -3,6 +3,8 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import connectToMongoDB from './db/connectToMongoDB.js';
 
+dotenv.config();
+
 const app = express();
 
 app.get('/', (req, res)  => {
