@@ -1,4 +1,3 @@
-import e from "express";
 import Creator from "../models/creator.models";
 import Student from "../models/student.models";
 
