@@ -1,11 +1,10 @@
+import TimerNavbar from "./components/TimerNavbar"
 
 
 function App() {
 
   return (
-    <>
-      Hello World
-    </>
+    <TimerNavbar/>
   )
 }
 
