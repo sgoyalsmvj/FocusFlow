@@ -41,10 +41,10 @@ const Timer = ({isActive ,isDone}) => {
 
 
   if(isDone){
-    
+
     return(
        
-         <div> 
+         <div className=''> 
              The task is completed in {seconds} seconds
          </div>
       
