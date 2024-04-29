@@ -2,7 +2,7 @@ import Video from '../models/video.models.js'
 import multer from "multer";
 import aws from "aws-sdk";
 
-export  const getVideos = async (req, res) => {
+export const getVideos = async (req, res) => {
   const {creator} = req.body;
   try{
     const videosByCreator = await Video.find({creator:creator._id});
@@ -13,7 +13,7 @@ export  const getVideos = async (req, res) => {
   }
 };
 
-export  const uploadVideo = async (req, res) => {
+export const uploadVideo = async (req, res) => {
   const s3 = new aws.S3({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
@@ -50,7 +50,7 @@ export  const uploadVideo = async (req, res) => {
   }
 };
 
-export  const deleteVideo = async (req, res) => {
+export const deleteVideo = async (req, res) => {
   const { filename } = req.params;
 
   const params = {

@@ -1,5 +1,6 @@
-import Student from "../models/studentModel.js";
-import Task from "../models/taskModel.js";
+import Student from "../models/student.models.js";
+import Task from "../models/task.models.js";
+import Video from "../models/video.models.js";
 
 export const addNewTask = async (req, res) => {
   const { name, student } = req.body;
@@ -36,21 +37,47 @@ export const getTasks = async (req, res) => {
       }
     }
 
-    res.status(200).json(list);
+    res.status(200).json(list, { message: "Task Successfully Fetched!!" });
   } catch (error) {
     res.status(404).json({ message: "not able to send the task list" });
   }
 };
 
-
 export const deleteTask = async (req, res) => {
-    const id = req.params.id;
-    try{
-        const task = await Task.findByIdAndDelete(id);
-        res.status(200).json({message: 'task deleted successfully'});
+  const id = req.params.id;
+  try {
+    const task = await Task.findByIdAndDelete(id);
+    res.status(200).json({ message: "task deleted successfully" });
+  } catch (error) {
+    res.status(404).json({ message: "task not found" });
+  }
+};
+
+export const getVideosRelatedToTask = async (req, res) => {
+  const task = req.params.task;
+  const list = [];
+  try {
+    const videos = Video.find();
+    for (let video of videos) {
+      for (let tag of video.tags) {
+        if (tag == task) {
+          list.push(video);
+        }
+      }
     }
-    catch(error){
-        res.status(404).json({message: 'task not found'});
-    }
+    res.status(200).json(list, { message: "Videos successfully fetched!" });
+  } catch (err) {
+    res.status(404).json({ message: "Videos not found!" });
+  }
+};
+
+export const getVideo = async (req, res) => {
+  const { id } = req.params.id;
+  try {
+    const video = Video.findById(id);
+    res.status(200).json(video, { message: "Video successfully fetched!" });
+  } catch (error) {
+    res.status(404).json({ message: "video not found!" });
+  }
 };
 
