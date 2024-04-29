@@ -1,7 +1,7 @@
 import Student from "../models/studentModel.js";
 import Task from "../models/taskModel.js";
 
-const addNewTask = async (req, res) => {
+export const addNewTask = async (req, res) => {
   const { name, student } = req.body;
   try {
     const task = await Task.create({ name, timer: 0, status: "pending" });
@@ -14,7 +14,7 @@ const addNewTask = async (req, res) => {
   }
 };
 
-const getTasks = async (req, res) => {
+export const getTasks = async (req, res) => {
   try {
     const student = await Student.findById(req.body.student._id);
     const task = student.Tasks;
@@ -43,7 +43,7 @@ const getTasks = async (req, res) => {
 };
 
 
-const deleteTask = async (req, res) => {
+export const deleteTask = async (req, res) => {
     const id = req.params.id;
     try{
         const task = await Task.findByIdAndDelete(id);
