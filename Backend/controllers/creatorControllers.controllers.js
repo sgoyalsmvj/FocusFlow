@@ -1,91 +1,71 @@
-import Student from "../models/studentModel.js";
-import Task from "../models/taskModel.js";
-import multer from 'multer';
-import aws from 'aws-sdk';
+import Video from '../models/video.models.js'
+import multer from "multer";
+import aws from "aws-sdk";
 
+export  const getVideos = async (req, res) => {
+  const {creator} = req.body;
+  try{
+    const videosByCreator = await Video.find({creator:creator._id});
+    res.status(200).json({videos:videosByCreator});
+  }
+  catch(error){
+    res.status(500).json({message:"Videos were not found"});
+  }
+};
 
-const getVideos = async (req, res) => {
-   
-    
-   
+export  const uploadVideo = async (req, res) => {
+  const s3 = new aws.S3({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  });
 
+  const upload = multer({ dest: "uploads/" });
 
-
-}
-
-const uploadVideo = async (req, res) => {
-
-
-    const s3 = new aws.S3({
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-        secretAccessKey:  process.env.AWS_SECRET_ACCESS_KEY,
-    });
-
-    const upload = multer({ dest: 'uploads/' });
-   
-   try {
-
+  try {
     const file = req.file;
     if (!file) {
-        return res.status(400).send('No file uploaded.');
-      }
-    
-      // Read file content
-      const fileContent = fs.readFileSync(file.path);
-    
-      // Upload file to S3 bucket
-      const params = {
-        Bucket: process.env.AWS_BUCKET_NAME,
-        Key: file.originalname,
-        Body: fileContent,
-      };
+      return res.status(400).send("No file uploaded.");
+    }
 
-      
-      s3.upload(params, (err, data) => {
-        if (err) {
-          console.error('Error uploading file to S3:', err);
-          return res.status(500).send('Failed to upload file to S3.');
-        }
-        console.log('File uploaded successfully:', data.Location);
-        res.status(200).send('File uploaded to S3.');
-      });
-    
+    // Read file content
+    const fileContent = fs.readFileSync(file.path);
 
-
-
-       
-   } catch (error) {
-     
-      res.status(500).json({ message: "File was not uploaded" });
-
-   }
-
-
-
-}
-
-const deleteVideo = async (req, res) => {
-   
-    const { filename } = req.params;
-
+    // Upload file to S3 bucket
     const params = {
       Bucket: process.env.AWS_BUCKET_NAME,
-      Key: filename,
+      Key: file.originalname,
+      Body: fileContent,
     };
-  
-    s3.deleteObject(params, (err, data) => {
+
+    s3.upload(params, (err, data) => {
       if (err) {
-        console.error('Error deleting file from S3:', err);
-        return res.status(500).send('Failed to delete file from S3.');
+        console.error("Error uploading file to S3:", err);
+        return res.status(500).send("Failed to upload file to S3.");
       }
-      console.log('File deleted successfully from S3:', filename);
-      res.status(200).send('File deleted successfully from S3.');
+      console.log("File uploaded successfully:", data.Location);
+      res.status(200).send("File uploaded to S3.");
     });
+  } catch (error) {
+    res.status(500).json({ message: "File was not uploaded" });
+  }
+};
+
+export  const deleteVideo = async (req, res) => {
+  const { filename } = req.params;
+
+  const params = {
+    Bucket: process.env.AWS_BUCKET_NAME,
+    Key: filename,
+  };
+
+  s3.deleteObject(params, (err, data) => {
+    if (err) {
+      console.error("Error deleting file from S3:", err);
+      return res.status(500).send("Failed to delete file from S3.");
+    }
+    console.log("File deleted successfully from S3:", filename);
+    res.status(200).send("File deleted successfully from S3.");
+  });
+};
 
 
-
-
-
-}
-
-export { getVideos, uploadVideo, deleteVideo};
