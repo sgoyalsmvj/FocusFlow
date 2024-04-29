@@ -1,9 +1,9 @@
-// import { Router } from "express";
-// import creatorController from '../controllers/creatorControllers.controllers.js';
-// const creatorRoutes = Router();
+import { Router } from "express";
+import {getVideos,uploadVideo,deleteVideo} from '../controllers/creatorControllers.controllers.js';
+const creatorRoutes = Router();
 
-// creatorRoutes.get('/getVideos',creatorController.getVideos);
-// creatorRoutes.post('/uploadVideo',creatorController.uploadVideo);
-// creatorRoutes.delete('/deleteVideo/:id',creatorController.deleteVideo);
+creatorRoutes.get('/getVideos',getVideos);
+creatorRoutes.post('/uploadVideo',uploadVideo);
+creatorRoutes.delete('/deleteVideo/:id',deleteVideo);
 
-// export default creatorRoutes;
+export default creatorRoutes;

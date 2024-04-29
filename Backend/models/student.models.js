@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 
 const studentSchema = new mongoose.Schema({
 
-    username:{
+    name:{
         type:String,
         required:true
     },
