@@ -38,22 +38,23 @@ const Timer = ({isActive ,isDone}) => {
 
     return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
   }, []);
-
-
+  
   if(isDone){
 
     return(
        
-         <div className=''> 
+         <h1 className='text-center text-gray-900'> 
              The task is completed in {seconds} seconds
-         </div>
+         </h1>
       
     );
 }
 
+  
 
 
-  return <div>Timer: {formatTime(seconds)}</div>;
+
+  return <h1 className='text-gray-900'>Timer: {formatTime(seconds)}</h1>;
 };
 
 export default Timer;

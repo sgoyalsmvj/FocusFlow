@@ -13,8 +13,9 @@ const TimerNavbar = () => {
   };
 
   return (
-    <div className={`flex justify-${isDone ? 'center' : 'between'} items-center h-[130px] text-white`}>
-      {!isDone ? (
+    <div className={`flex justify-${isDone ? 'between' : 'center'} items-center h-130 text-white`}>
+
+      {(!isDone) ? (
         isActive ? (
           <button
             className="shadow-lg rounded-lg  ml-[30px] p-2 w-[150px] bg-red-500  hover:bg-red-700"
@@ -31,12 +32,13 @@ const TimerNavbar = () => {
           </button>
         )
       ) : null}
-
-      <h1 className="text-black">
+       
+       
+     
         <Timer isActive={isActive} isDone={isDone} />
-      </h1>
+      
 
-      {!isDone ? (
+      {(!isDone) ? (
         <button
           className="shadow-lg rounded-lg mr-[30px] w-[150px] p-2 bg-blue-500  hover:bg-blue-700"
           onClick={handleDone}
