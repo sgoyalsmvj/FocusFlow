@@ -13,39 +13,41 @@ const TimerNavbar = () => {
   };
 
   return (
-    <div className={`flex justify-${isDone ? 'between' : 'center'} items-center h-130 text-white`}>
+    <div className={`flex justify-between items-center h-[130px] text-white`}>
+      <div>
+        {!isDone ? (
+          isActive ? (
+            <button
+              className="shadow-lg rounded-lg  ml-[30px] p-2 w-[150px] bg-red-500  hover:bg-red-700"
+              onClick={() => setisActive(false)}
+            >
+              Pause
+            </button>
+          ) : (
+            <button
+              className="shadow-lg rounded-lg ml-[30px] w-[150px] p-2 bg-green-500  hover:bg-green-700"
+              onClick={() => setisActive(true)}
+            >
+              Start
+            </button>
+          )
+        ) : null}
+      </div>
 
-      {(!isDone) ? (
-        isActive ? (
-          <button
-            className="shadow-lg rounded-lg  ml-[30px] p-2 w-[150px] bg-red-500  hover:bg-red-700"
-            onClick={() => setisActive(false)}
-          >
-            Pause
-          </button>
-        ) : (
-          <button
-            className="shadow-lg rounded-lg ml-[30px] w-[150px] p-2 bg-green-500  hover:bg-green-700"
-            onClick={() => setisActive(true)}
-          >
-            Start
-          </button>
-        )
-      ) : null}
-       
-       
-     
+      <h1 className="text-black">
         <Timer isActive={isActive} isDone={isDone} />
-      
+      </h1>
 
-      {(!isDone) ? (
-        <button
-          className="shadow-lg rounded-lg mr-[30px] w-[150px] p-2 bg-blue-500  hover:bg-blue-700"
-          onClick={handleDone}
-        >
-          Task Done{" "}
-        </button>
-      ) :null}
+      <div>
+        {!isDone ? (
+          <button
+            className="shadow-lg rounded-lg mr-[30px] w-[150px] p-2 bg-blue-500  hover:bg-blue-700"
+            onClick={handleDone}
+          >
+            Task Done{" "}
+          </button>
+        ) : null}
+      </div>
     </div>
   );
 };
