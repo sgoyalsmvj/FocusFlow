@@ -45,7 +45,7 @@ const Timer = ({isActive ,isDone}) => {
        
          <div className='text-4xl font-bold'> 
              The task is completed in {seconds} seconds
-         </h1>
+         </div>
       
     );
 }
