@@ -44,7 +44,7 @@ const Timer = ({isActive ,isDone}) => {
 
     return(
        
-         <div className=''> 
+         <div className='text-4xl font-bold'> 
              The task is completed in {seconds} seconds
          </div>
       
@@ -53,7 +53,7 @@ const Timer = ({isActive ,isDone}) => {
 
 
 
-  return <div>Timer: {formatTime(seconds)}</div>;
+  return <div className='text-4xl font-semibold'>{formatTime(seconds)}</div>;
 };
 
 export default Timer;
