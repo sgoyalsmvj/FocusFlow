@@ -38,8 +38,7 @@ const Timer = ({isActive ,isDone}) => {
 
     return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
   }, []);
-
-
+  
   if(isDone){
 
     return(
@@ -51,7 +50,7 @@ const Timer = ({isActive ,isDone}) => {
     );
 }
 
-
+  
 
   return <div className='text-4xl font-semibold'>{formatTime(seconds)}</div>;
 };
