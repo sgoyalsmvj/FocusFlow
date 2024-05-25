@@ -3,6 +3,13 @@
     display: flex;
 }
 
+.fntStyle {
+    font-size: 2em;
+    letter-spacing: 3px;
+    font-family: monospace;
+    width: 100%;
+    white-space: nowrap;
+}
 
 .text {
     font-size: 2em;
