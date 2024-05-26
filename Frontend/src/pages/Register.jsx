@@ -1,15 +1,26 @@
+import axios from "axios";
 import React, { useState } from "react";
+import { Navigate } from "react-router-dom";
 
 const Register = () => {
   const [role, setRole] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const handleSubmit = (e) => {
+ const [redirect, setRedirect] = useState(false);
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    console.log(name, email, password, role);
+    // console.log(name, email, password, role);
+    const data = await axios.post("/auth/register", {
+      name: name,
+      email: email,
+      password: password,
+      role: role,
+    });
+    console.log(data);
+    setRedirect(true);
   };
+  
 
   const creatorRole = () => {
     setRole("creator");
@@ -17,11 +28,18 @@ const Register = () => {
   const studentRole = () => {
     setRole("student");
   };
+
+  if( redirect ) {
+    return <Navigate to="/" />
+  }
   return (
     <div className="text-white text-center flex flex-col justify-center items-center">
       <div className="m-20 w-max">
         <h1 className="text-3xl mb-7">Sign Up To FocusFlow</h1>
-        <form onSubmit={handleSubmit} className="flex flex-col items-start m-5 p-5 rounded-lg font-light h-max w-[350px] bg-[#161b22] border border-gray-700 outline-[1px]">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col items-start m-5 p-5 rounded-lg font-light h-max w-[350px] bg-[#161b22] border border-gray-700 outline-[1px]"
+        >
           <label className="my-2">Name</label>
           <input
             className="mb-3 w-full rounded-md border border-gray-600 bg-[#0d1117] p-1 focus:border-blue-600 focus:outline-none text-white"

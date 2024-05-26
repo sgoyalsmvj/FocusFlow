@@ -5,14 +5,17 @@ import creatorRoutes from './routes/creatorRoutes.routes.js';
 import studentRoutes from './routes/studentRoutes.routes.js';
 import authRoutes from './routes/authRoutes.routes.js';
 import cookieParser from 'cookie-parser';
-
+import cors from 'cors';
 dotenv.config();
 
 const app = express();
 
 app.use(express.json());
 app.use(cookieParser());
-
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true
+}));
 app.get('/', (req, res)  => {
   res.send('Hello World');
 })
