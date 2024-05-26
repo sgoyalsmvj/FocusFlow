@@ -101,4 +101,7 @@ export const logout = async (req,res) => {
   }
 };
 
+export const getProfile = ( req,res) => {
+  
+}
 
