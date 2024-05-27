@@ -40,7 +40,7 @@ const LandingPage = () => {
         </div>
 
         <div className="flex items-center">
-          <input className="h-[40px] w-[320px] rounded-l-lg" />
+          <input className="h-[40px] w-[320px] rounded-l-lg pl-2 font-semibold font-mono text-lg" />
           <button className="h-[40px] w-[80px] rounded-r-lg bg-gray-500 text-lg text-white font-mono" onClick={handleAddButton}>
             Add
           </button>

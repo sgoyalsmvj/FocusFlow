@@ -21,7 +21,7 @@ const Login = () => {
 
   return (
     <div className="text-white text-center flex flex-col justify-center items-center">
-      <div className="m-20 w-max">
+      <div className="m-20 w-max font-mono">
         <h1 className="text-3xl mb-7">Sign In To FocusFlow</h1>
         <form onSubmit={handleSubmit} className="flex flex-col items-start m-5 p-5 rounded-lg font-light h-max w-[350px] bg-[#161b22] border border-gray-700 outline-[1px]">
           <label className="my-2">Username or Email Address</label>

@@ -33,7 +33,7 @@ const Register = () => {
     return <Navigate to="/" />
   }
   return (
-    <div className="text-white text-center flex flex-col justify-center items-center">
+    <div className="text-white text-center flex flex-col justify-center items-center font-mono">
       <div className="m-20 w-max">
         <h1 className="text-3xl mb-7">Sign Up To FocusFlow</h1>
         <form
