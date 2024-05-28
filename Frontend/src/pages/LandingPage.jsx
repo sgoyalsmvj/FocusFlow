@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import NavBar from "./NavBar";
+
 import "../styles/LandingPage.css";
+import NavBar from "../components/NavBar";
 
 const LandingPage = () => {
   const [listTask, setListTask] = useState([]);
