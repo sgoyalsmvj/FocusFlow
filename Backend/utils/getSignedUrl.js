@@ -5,6 +5,9 @@ import {
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import fs from "fs";
+import dotenv from "dotenv";
+dotenv.config();
+
 const s3Client = new S3Client({
   region: process.env.AWS_REGION_NAME,
   credentials: {
@@ -13,34 +16,42 @@ const s3Client = new S3Client({
   },
 });
 
-const main = async () => {
-  const command = new PutObjectCommand({
-    Bucket: process.env.AWS_BUCKET_NAME ,
-    Key: "uploads/photo1.gif",
-    Body: fs.createReadStream("./uploads/photo1.gif"),
-  });
+const uploadToS3 = async (file) => {
+  const fileStream = fs.createReadStream(file.path);
+  const uploadParams = {
+    Bucket: process.env.AWS_BUCKET_NAME,
+    Key: `uploads/${file.filename}`, // Unique file key
+    Body: fileStream,
+    ContentType: file.mimetype,
+    ACL: "public-read",
+  };
 
   try {
-    const response = await s3Client.send(command);
-    console.log(response);
+    await s3Client.send(new PutObjectCommand(uploadParams));
+    const getObjectParams = {
+      Bucket: process.env.AWS_BUCKET_NAME,
+      Key: `uploads/${file.filename}`,
+    };
+    const url = await getSignedUrl(
+      s3Client,
+      new GetObjectCommand(getObjectParams)
+    );
+
+    // Delete the file from the local filesystem
+    fs.unlink(file.path, (err) => {
+      if (err) {
+        console.error("Error deleting local file:", err);
+      } else {
+        console.log("Local file deleted successfully");
+      }
+    });
+
+    return url;
   } catch (error) {
-    console.log(error);
+    console.error("Error uploading to S3:", error);
+    throw new Error("Could not upload file to S3");
   }
 };
 
-// main();
-
-async function getObjectURL() {
-  const command = new GetObjectCommand({
-    Bucket: "focus-flow-uploads",
-    Key: "uploads/photo1.gif",
-  });
-  const url = await getSignedUrl(s3Client, command);
-  return url;
-}
-
-async function init() {
-  console.log(await getObjectURL("uploads/photo1.gif"));
-}
-
-init();
+export { uploadToS3 };
+  

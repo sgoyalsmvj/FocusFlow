@@ -1,6 +1,6 @@
 import React from "react";
 
-const VideoCard = ({key,src,name,duration}) => {
+const VideoCard = ({ key, src, name, duration }) => {
   return (
     <div key={key} className="mx-4 my-5 ">
       <img className="bg-white w-[300px] h-[180px] rounded-md" src={src} />

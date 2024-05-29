@@ -22,10 +22,12 @@ const Register = () => {
   };
   
 
-  const creatorRole = () => {
+  const creatorRole = (ev) => {
+    ev.preventDefault();
     setRole("creator");
   };
-  const studentRole = () => {
+  const studentRole = (ev) => {
+    ev.preventDefault();
     setRole("student");
   };
 

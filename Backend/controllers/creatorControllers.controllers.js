@@ -1,51 +1,46 @@
-import Video from '../models/video.models.js'
-import multer from "multer";
-import aws from "aws-sdk";
+import Video from "../models/video.models.js";
+import capitalize from "../utils/capitalize.js";
+import { uploadToS3 } from "../utils/getSignedUrl.js";
 
 export const getVideos = async (req, res) => {
-  const {creator} = req.body;
-  try{
-    const videosByCreator = await Video.find({creator:creator._id});
-    res.status(200).json({videos:videosByCreator});
-  }
-  catch(error){
-    res.status(500).json({message:"Videos were not found"});
+  const { creator } = req;
+  try {
+    const videosByCreator = await Video.find({ owner: creator._id });
+    res.status(200).json({ videos: videosByCreator });
+  } catch (error) {
+    res.status(500).json({ message: "Videos were not found" });
   }
 };
 
 export const uploadVideo = async (req, res) => {
-  const s3 = new aws.S3({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  });
-
-  const upload = multer({ dest: "uploads/" });
-
   try {
-    const file = req.file;
-    if (!file) {
-      return res.status(400).send("No file uploaded.");
+    const { title, description, tags } = req.body;
+    const videoFile = req.files["video"][0];
+    const thumbnailFile = req.files["thumbnail"]
+      ? req.files["thumbnail"][0]
+      : null;
+
+    const videoKey = await uploadToS3(videoFile);
+    let thumbnailKey = null;
+
+    if (thumbnailFile) {
+      thumbnailKey = await uploadToS3(thumbnailFile);
     }
 
-    // Read file content
-    const fileContent = fs.readFileSync(file.path);
-
-    // Upload file to S3 bucket
-    const params = {
-      Bucket: process.env.AWS_BUCKET_NAME,
-      Key: file.originalname,
-      Body: fileContent,
-    };
-
-    s3.upload(params, (err, data) => {
-      if (err) {
-        console.error("Error uploading file to S3:", err);
-        return res.status(500).send("Failed to upload file to S3.");
-      }
-      console.log("File uploaded successfully:", data.Location);
-      res.status(200).send("File uploaded to S3.");
+    const newVideo = new Video({
+      title,
+      description,
+      tags: tags.split(",").map((tag) => tag.trim()),
+      src: videoKey,
+      thumbnail: thumbnailKey,
+      owner: req.creator._id,
     });
+
+    await newVideo.save();
+
+    res.status(201).json({ message: "File uploaded successfully" });
   } catch (error) {
+    console.error("Error uploading file:", error);
     res.status(500).json({ message: "File was not uploaded" });
   }
 };
@@ -67,5 +62,3 @@ export const deleteVideo = async (req, res) => {
     res.status(200).send("File deleted successfully from S3.");
   });
 };
-
-
