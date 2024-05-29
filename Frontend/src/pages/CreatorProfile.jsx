@@ -5,55 +5,23 @@ import hq from "../assets/hqdefault.webp";
 import { HiOutlinePlus } from "react-icons/hi";
 import VideoCard from "../components/VideoCard";
 import UploadVideoModal from "../components/UploadVideoModal";
+import axios from "axios";
 const CreatorProfile = () => {
   const [videoData, setVideoData] = useState([]);
   const [toggleModal, setToggleModal] = useState(false);
 
-  const data = [
-    {
-      id: "1",
-      name: "Test Video 1",
-      src: "https://example.com/videos/test_video1.mp4",
-      description: "A 10-second test video with a solid blue color.",
-      duration: "00:00:10",
-      format: "mp4",
-      resolution: "1280x720",
-    },
-    {
-      id: "2",
-      name: "Test Video 2",
-      src: "https://example.com/videos/test_video2.mp4",
-      description: "A 10-second test video with a color gradient pattern.",
-      duration: "00:00:10",
-      format: "mp4",
-      resolution: "1280x720",
-    },
-    {
-      id: "3",
-      name: "Test Video 3",
-      src: "https://example.com/videos/test_video3.mp4",
-      description: "A 10-second test video with a moving test pattern.",
-      duration: "00:00:10",
-      format: "mp4",
-      resolution: "1280x720",
-    },
-    {
-      id: "4",
-      name: "Test Video 4",
-      src: "https://example.com/videos/test_video3.mp4",
-      description: "A 10-second test video with a moving test pattern.",
-      duration: "00:00:10",
-      format: "mp4",
-      resolution: "1280x720",
-    },
-  ];
   const addNewVideo = (ev) => {
     ev.preventDefault();
     setToggleModal(true);
   };
+  const fetchVideoData = async () => {
+    const data = await axios.get("/creator/getVideos");
+    return data;
+  };
   useEffect(() => {
-    setVideoData(data);
-    console.log(videoData);
+    fetchVideoData().then((res) => {
+      setVideoData(res.data.videos);
+    });
   }, []);
 
   return (
@@ -91,16 +59,16 @@ const CreatorProfile = () => {
           </div>
           <div className="videos flex flex-wrap justify-center items-center ml-10">
             {videoData &&
-              videoData.map((video, i) => (
+              videoData?.map((video) => (
                 <VideoCard
-                  key={i}
-                  name={video.name}
-                  src={hq}
+                  key={video._id}
+                  name={video.title}
+                  src={video.thumbnail}
                   duration={video.duration}
                 />
               ))}
           </div>
-          {toggleModal && <UploadVideoModal onClose={setToggleModal}/>}
+          {toggleModal && <UploadVideoModal onClose={setToggleModal} />}
         </div>
       </div>
     </div>
