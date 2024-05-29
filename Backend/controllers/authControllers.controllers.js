@@ -61,8 +61,9 @@ export const login = async (req, res) => {
       }
       const token = creator.generateToken();
       const options = {
-        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-        httpOnly: true,
+        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),  
+        samesite: "none",
+        secure: true,
       };
 
       res.status(200).cookie("token", token, options).json({ creator, token });
@@ -80,7 +81,8 @@ export const login = async (req, res) => {
       const token = student.generateToken();
       const options = {
         expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-        httpOnly: true,
+        samesite: "none",
+        secure: true,
       };
 
       res.status(200).cookie("token", token, options).json({ student, token });
@@ -101,7 +103,11 @@ export const logout = async (req,res) => {
   }
 };
 
-export const getProfile = ( req,res) => {
-  
-}
+export const getProfile = (req, res) => {
+  if (req.creator) {
+    res.status(200).json(req.creator);
+  } else {
+    res.status(200).json(req.student);
+  }
+};
 
