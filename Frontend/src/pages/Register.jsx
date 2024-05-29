@@ -18,7 +18,12 @@ const Register = () => {
       role: role,
     });
     console.log(data);
-    setRedirect(true);
+    if(role === "creator") {
+      setRedirect("/creator/profile");
+    }
+    else if(role === "student") {
+      setRedirect("/student/profile");
+    }
   };
   
 
@@ -32,7 +37,7 @@ const Register = () => {
   };
 
   if( redirect ) {
-    return <Navigate to="/" />
+    return <Navigate to={`${redirect}`} />
   }
   return (
     <div className="text-white text-center flex flex-col justify-center items-center font-mono">
