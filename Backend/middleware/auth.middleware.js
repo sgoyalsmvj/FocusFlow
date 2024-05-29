@@ -8,7 +8,7 @@ export const isAuthenticated = async (req, res, next) => {
     const { token } = req.cookies;
     if (!token) {
       return res.status(410).json({
-        message: "please login first",
+        messaage: "please login first",
       });
     }
 
@@ -18,9 +18,10 @@ export const isAuthenticated = async (req, res, next) => {
 
     next();
   } catch (error) {
-    return res.status(500).json({
-      message: error.message,
-    });
+    {
+      return res.status(500).json({
+        message: error.messaage,
+      });
+    }
   }
 };
-
