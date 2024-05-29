@@ -61,17 +61,12 @@ export const deleteTask = async (req, res) => {
 
 export const getVideosRelatedToTask = async (req, res) => {
   const task = req.params.task;
-  const list = [];
   try {
-    const videos = Video.find();
-    for (let video of videos) {
-      for (let tag of video.tags) {
-        if (tag == task) {
-          list.push(video);
-        }
-      }
-    }
-    res.status(200).json({ list, message: "Videos successfully fetched!" });
+    const videos = await Video.find({ tags: task }).select('src -_id');
+  
+    const list = videos.map(video => video.src);
+
+    res.status(200).json({ list });
   } catch (err) {
     res.status(404).json({ message: "Videos not found!" });
   }

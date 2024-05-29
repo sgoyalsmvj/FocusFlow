@@ -18,19 +18,26 @@ const Register = () => {
       role: role,
     });
     console.log(data);
-    setRedirect(true);
+    if(role === "creator") {
+      setRedirect("/creator/profile");
+    }
+    else if(role === "student") {
+      setRedirect("/student/profile");
+    }
   };
   
 
-  const creatorRole = () => {
+  const creatorRole = (ev) => {
+    ev.preventDefault();
     setRole("creator");
   };
-  const studentRole = () => {
+  const studentRole = (ev) => {
+    ev.preventDefault();
     setRole("student");
   };
 
   if( redirect ) {
-    return <Navigate to="/" />
+    return <Navigate to={`${redirect}`} />
   }
   return (
     <div className="text-white text-center flex flex-col justify-center items-center font-mono">

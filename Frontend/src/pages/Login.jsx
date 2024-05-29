@@ -4,19 +4,27 @@ import { Navigate } from "react-router-dom";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [redirect, setRedirect] = useState(false);
+  const [role, setRole] = useState("");
+  const [redirect, setRedirect] = useState("");
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Login");
     const data = await axios.post("/auth/login", {
       email: email,
       password: password,
+      role: role
     });
     console.log(data);
-    setRedirect(true);
+    if(role === "creator") {
+      setRedirect("/creator/profile");
+    }
+    else if(role === "student") {
+      setRedirect("/student/profile");
+    }
+    
   };
   if (redirect) {
-    return <Navigate to="/" />;
+    return <Navigate to={`${redirect}`} />;
   }
 
   return (
@@ -38,6 +46,14 @@ const Login = () => {
             type="password"
             name="password"
             onChange={(e) => setPassword(e.target.value)}
+          />
+
+          <label className="my-2">Role</label>
+          <input
+            className="mb-3 w-full rounded-md border border-gray-600 bg-[#0d1117] p-1 focus:border-blue-600 focus:outline-none text-white"
+            type="text"
+            name="role"
+            onChange={(e) => setRole(e.target.value)}
           />
 
           <button
