@@ -4,7 +4,7 @@ import Timer from "./Timer";
 const TimerNavbar = () => {
   console.log("render");
 
-  const [isActive, setisActive] = useState(false);
+  const [isActive, setisActive] = useState(true);
   const [isDone, setDone] = useState(false);
 
   const handleDone = () => {
