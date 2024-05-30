@@ -7,6 +7,8 @@ import axios from "axios";
 import { AuthProvider } from "./context/AuthContext";
 import LandingPage from "./pages/LandingPage";
 import CreatorProfile from "./pages/CreatorProfile";
+import NavBar from "./components/NavBar";
+import StudentVideosBrowse from "./pages/StudentVideosBrowse";
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 axios.defaults.withCredentials = true;
@@ -20,6 +22,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/creator/profile" element={<CreatorProfile />} />
+        <Route path="/student/videos" element={<StudentVideosBrowse/>} />
       </Routes>
     </AuthProvider>
   );
