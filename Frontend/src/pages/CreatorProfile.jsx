@@ -48,7 +48,7 @@ const CreatorProfile = () => {
           {/* Creator's information */}
           <div className="w-2/3 ml-5">
             <h1 className="text-4xl font-semibold font-mono m-5">
-              {authUser.name}
+              {authUser?.name}
             </h1>
             <p className="w-4/5 ml-5 font-medium font-mono">
               I'm kirat, a 2018 Computer Science undergrad from IIT Roorkee.
