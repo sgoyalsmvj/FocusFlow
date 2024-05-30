@@ -28,15 +28,8 @@ const uploadToS3 = async (file) => {
 
   try {
     await s3Client.send(new PutObjectCommand(uploadParams));
-    const getObjectParams = {
-      Bucket: process.env.AWS_BUCKET_NAME,
-      Key: `uploads/${file.filename}`,
-    };
-    const url = await getSignedUrl(
-      s3Client,
-      new GetObjectCommand(getObjectParams)
-    );
-
+    const url = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION_NAME}.amazonaws.com/uploads/${file.filename}`;
+    console.log(url)
     // Delete the file from the local filesystem
     fs.unlink(file.path, (err) => {
       if (err) {
@@ -52,6 +45,7 @@ const uploadToS3 = async (file) => {
     throw new Error("Could not upload file to S3");
   }
 };
+
 
 export { uploadToS3 };
   

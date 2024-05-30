@@ -44,7 +44,7 @@ export const getTasks = async (req, res) => {
 
 export const deleteTask = async (req, res) => {
   const id = req.params.id;
-  const {student} = req.body;
+  const { student } = req.body;
   console.log(id);
   try {
     const task = await Task.findByIdAndDelete(id);
@@ -60,20 +60,18 @@ export const deleteTask = async (req, res) => {
 };
 
 export const getVideosRelatedToTask = async (req, res) => {
-  const task = req.params.task;
+  const keywords = decodeURIComponent(req.params.keywords).split(" ");
   try {
-    const videos = await Video.find({ tags: task }).select('src -_id');
-  
-    const list = videos.map(video => video.src);
-
-    res.status(200).json({ list });
+    const videos = await Video.find({ tags: { $in: keywords } });
+    // console.log(videos);
+    res.status(200).json({ videos, message: "Videos successfully fetched!" });
   } catch (err) {
     res.status(404).json({ message: "Videos not found!" });
   }
 };
 
 export const getVideo = async (req, res) => {
-  const { id } = req.params.id;
+  const { id } = req.params;
   try {
     const video = Video.findById(id);
     res.status(200).json({ video, message: "Video successfully fetched!" });

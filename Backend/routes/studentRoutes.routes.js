@@ -13,7 +13,7 @@ studentRoutes.post("/addnewtask",isAuthenticated, addNewTask);
 studentRoutes.get("/gettasks",isAuthenticated, getTasks);
 studentRoutes.delete("/deletetask/:id",isAuthenticated, deleteTask);
 
-studentRoutes.get("/getVideos/:task",isAuthenticated, getVideosRelatedToTask);
+studentRoutes.get("/getVideos/:keywords", isAuthenticated, getVideosRelatedToTask);
 studentRoutes.get("/getVideo/:id",isAuthenticated, getVideo);
 
 export default studentRoutes;
