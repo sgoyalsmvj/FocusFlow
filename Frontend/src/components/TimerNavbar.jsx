@@ -2,14 +2,24 @@ import React, { useState, useEffect } from "react";
 import Timer from "./Timer";
 
 const TimerNavbar = () => {
-  console.log("render");
+  const [isActive, setIsActive] = useState(
+    JSON.parse(localStorage.getItem("isActive")) ?? true
+  );
+  const [isDone, setIsDone] = useState(
+    JSON.parse(localStorage.getItem("isDone")) ?? false
+  );
 
-  const [isActive, setisActive] = useState(true);
-  const [isDone, setDone] = useState(false);
+  useEffect(() => {
+    localStorage.setItem("isActive", JSON.stringify(isActive));
+  }, [isActive]);
+
+  useEffect(() => {
+    localStorage.setItem("isDone", JSON.stringify(isDone));
+  }, [isDone]);
 
   const handleDone = () => {
-    setisActive(false);
-    setDone(true);
+    setIsActive(false);
+    setIsDone(true);
   };
 
   return (
@@ -19,14 +29,14 @@ const TimerNavbar = () => {
           isActive ? (
             <button
               className="shadow-lg font-mono rounded-lg  ml-[30px] p-2 sm:w-[150px] w-[100px] bg-red-500  hover:bg-red-700 font-semibold"
-              onClick={() => setisActive(false)}
+              onClick={() => setIsActive(false)}
             >
               Pause
             </button>
           ) : (
             <button
               className="shadow-lg font-mono rounded-lg ml-[30px] sm:w-[150px] w-[100px] p-2 bg-green-500  hover:bg-green-700 font-semibold"
-              onClick={() => setisActive(true)}
+              onClick={() => setIsActive(true)}
             >
               Start
             </button>
@@ -44,7 +54,7 @@ const TimerNavbar = () => {
             className="shadow-lg font-mono rounded-lg mr-[30px] sm:w-[150px] w-[100px] p-2 bg-blue-500  hover:bg-blue-700 font-semibold"
             onClick={handleDone}
           >
-            Task Done{" "}
+            Task Done
           </button>
         ) : null}
       </div>
