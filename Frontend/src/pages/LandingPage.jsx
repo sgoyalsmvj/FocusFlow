@@ -1,35 +1,66 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/LandingPage.css";
 import NavBar from "../components/NavBar";
+import axios from "axios";
+import { MdOutlineDelete } from "react-icons/md";
 
 const LandingPage = () => {
-  const [listTask, setListTask] = useState([]);
-  const [timer, setTimer] = useState(0);
+  const [listTask, setListTask] = useState([]); // Initialize as an empty array
+  const [taskName, setTaskName] = useState("");
 
-  const handleAddButton = () => {
-    const input = document.querySelector("input");
-    const text = input.value;
+  const formatTime = (time) => {
+    const hours = Math.floor(time / 3600)
+      .toString()
+      .padStart(2, "0");
+    const minutes = Math.floor((time % 3600) / 60)
+      .toString()
+      .padStart(2, "0");
+    const seconds = (time % 60).toString().padStart(2, "0");
+    return `${hours}:${minutes}:${seconds}`;
+  };
 
-    if (text.trim() !== "") {
-      const formatTime = (time) => {
-        const hours = Math.floor(time / 3600)
-          .toString()
-          .padStart(2, "0");
-        const minutes = Math.floor((time % 3600) / 60)
-          .toString()
-          .padStart(2, "0");
-        const seconds = (time % 60).toString().padStart(2, "0");
-        return `${hours}:${minutes}:${seconds}`;
-      };
-
-      const currentTime = formatTime(timer);
-      const keywords = text.split(" ").map((word) => word.toLowerCase());
-      const newTask = { text, time: currentTime, keywords };
-      setListTask((prevList) => [...prevList, newTask]);
-      input.value = "";
+  const handleAddButton = (ev) => {
+    ev.preventDefault();
+    if (taskName.trim() !== "") {
+      axios
+        .post("/student/addnewtask", { name: taskName })
+        .then((res) => {
+          const newTask = res.data.task;
+          setListTask((prev) => [...prev, newTask]);
+          setTaskName("");
+        })
+        .catch((err) => {
+          console.error("Error adding task:", err);
+        });
     }
   };
+
+  const handleDeleteTask = (id) => {
+    axios
+      .delete(`/student/deleteTask/${id}`)
+      .then(() => {
+        setListTask((prev) => prev.filter((task) => task._id !== id));
+      })
+      .catch((err) => {
+        console.error("Error deleting task:", err);
+      });
+  };
+
+  useEffect(() => {
+    axios
+      .get("/student/gettasks")
+      .then((res) => {
+        const tasks = res.data.list.map((task) => ({
+          ...task,
+          timer: task.timer || 0, // Ensure each task has a timer property
+        }));
+        setListTask(tasks);
+      })
+      .catch((err) => {
+        console.error("Error fetching tasks:", err);
+      });
+  }, []);
 
   return (
     <div className="h-screen">
@@ -44,8 +75,12 @@ const LandingPage = () => {
           </div>
         </div>
 
-        <div className="flex items-center">
-          <input className="h-[40px] w-[320px] rounded-l-lg pl-2 font-mono text-lg" />
+        <div className="flex items-center mt-7">
+          <input
+            className="h-[40px] w-[320px] rounded-l-lg pl-2 font-mono text-black text-lg"
+            value={taskName}
+            onChange={(ev) => setTaskName(ev.target.value)}
+          />
           <button
             className="h-[40px] w-[80px] rounded-r-lg bg-gray-500 text-lg text-white font-mono"
             onClick={handleAddButton}
@@ -56,21 +91,30 @@ const LandingPage = () => {
 
         <div
           id="taskArea"
-          className="overflow-y-auto h-[400px] w-[400px] space-y-2 border-[0.075rem] border-gray-100/10 mt-2"
+          className="overflow-y-auto h-max w-[500px] space-y-2 border-[0.075rem] border-gray-100/10 mt-4 p-1"
           style={{ scrollbarWidth: "thin", scrollbarColor: "gray transparent" }}
         >
           {listTask.map((task, index) => (
-            <button
+            <div
               key={index}
-              className="h-[40px] w-[398px] font-mono text-lg flex justify-between items-center text-white border-[0.075rem] border-gray-100/10"
+              className="cursor-default h-[40px] w-full font-mono text-lg flex justify-between items-center text-white border-[0.075rem] border-gray-100/10"
             >
               <Link
-                to={`/student/videoBrowse/${encodeURIComponent(task.text)}`}
+                to={`/student/videoBrowse/${encodeURIComponent(task.name)}`}
               >
-                <span className="ml-4">{task.text}</span>
+                <span className={` ${
+                  task.status === "pending" ? "text-red-400" : "text-green-500"
+                } ml-4`}>{task.name}</span>
               </Link>
-              <span className="mr-4">{task.time}</span>
-            </button>
+              
+              <span className="mr-2">{formatTime(task.timer)}</span>
+              <button
+                onClick={() => handleDeleteTask(task._id)}
+                className="mr-4"
+              >
+                <MdOutlineDelete />
+              </button>
+            </div>
           ))}
         </div>
       </div>

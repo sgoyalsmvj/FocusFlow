@@ -1,15 +1,20 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import axios from "axios";
 
 const NavBar = () => {
   // Destructure authUser and isLoggedIn from the AuthContext
-  const { authUser, isLoggedIn } = useAuth();
-  
+  const { authUser, setAuthUser, setIsLoggenIn, isLoggedIn } = useAuth();
+  const handleLogout = () => {
+    axios.get("/auth/logout").then((res) => {
+      setAuthUser(null);
+      setIsLoggenIn(false);
+    });
+  };
   return (
     // Navbar container with styling
     <div className="bg-gray-850 border-b-[0.075rem] font-mono border-b-gray-100/10 text-white flex justify-between h-[10vh]">
-      
       {/* Logo Section */}
       <div className="flex justify-center items-center w-[200px] text-2xl">
         FocusFlow
@@ -27,7 +32,12 @@ const NavBar = () => {
         )}
         {/* Display User name if logged in */}
         {isLoggedIn && (
-          <h1 className="text-2xl font-mono font-semibold">{authUser.name}</h1>
+          <button
+            className="bg-[#238636] px-3 p-2 font-semibold rounded-md"
+            onClick={handleLogout}
+          >
+            Logout
+          </button>
         )}
       </div>
     </div>

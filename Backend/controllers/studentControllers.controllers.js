@@ -3,49 +3,50 @@ import Task from "../models/task.models.js";
 import Video from "../models/video.models.js";
 
 export const addNewTask = async (req, res) => {
-  const { name, student } = req.body;
+  const { name } = req.body;
+  const { student } = req;
   try {
     const task = await Task.create({ name, timer: 0, status: "pending" });
     await task.save();
     const curstudent = await Student.findById(student._id);
     curstudent.Tasks.push(task._id);
     await curstudent.save();
-    res.status(201).json({ message: "task added successfully" });
+    res.status(201).json({ task, message: "task added successfully" });
   } catch (error) {
     res.status(404).json({ message: "not able to add the task" });
   }
 };
 
 export const getTasks = async (req, res) => {
-  const { student } = req.body;
-  console.log(student);
+  const { student } = req;
+  
   try {
-    const curstudent = await Student.findById(student._id);
-    const tasks = curstudent.Tasks;
-    const list = [];
-
-    for (let i = 0; i < tasks.length; i++) {
-      const task = await Task.findById(tasks[i]);
-      const time = new Date();
-
-      if (
-        task.createdAt.getDate() == time.getDate() &&
-        task.createdAt.getMonth() == time.getMonth() &&
-        task.createdAt.getFullYear() == time.getFullYear()
-      ) {
-        list.push(task);
-      }
+    const curStudent = await Student.findById(student._id).populate('Tasks');
+    
+    if (!curStudent) {
+      return res.status(404).json({ message: 'Student not found' });
     }
-    res.status(200).json({ list, message: "Task Successfully Fetched!!" });
+
+    const tasks = curStudent.Tasks;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Set to the start of the day
+
+    const todaysTasks = tasks.filter(task => {
+      const taskDate = new Date(task.createdAt);
+      taskDate.setHours(0, 0, 0, 0); // Set to the start of the day
+      return taskDate.getTime() === today.getTime();
+    });
+
+    res.status(200).json({ list: todaysTasks, message: 'Tasks successfully fetched!' });
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
+
 export const deleteTask = async (req, res) => {
   const id = req.params.id;
-  const { student } = req.body;
-  console.log(id);
+  const { student } = req;
   try {
     const task = await Task.findByIdAndDelete(id);
     const curstudent = await Student.findById(student._id);
