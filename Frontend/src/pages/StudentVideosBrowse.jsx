@@ -6,22 +6,23 @@ import { useParams } from "react-router-dom";
 import VideoCard from "../components/VideoCard";
 
 const StudentVideosBrowse = () => {
-  const { keywords } = useParams();
+  const { keywords, id } = useParams();
   const [videoList, setVideoList] = useState([]);
+
   useEffect(() => {
     axios.get(`/student/getVideos/${keywords}`).then((res) => {
       setVideoList(res.data.videos);
-    //   console.log(videoList);
     });
-  }, []);
+  }, [keywords]);
+
   return (
     <div className="">
       <div>
-        <TimerNavbar />
+        <TimerNavbar currentTask={id} />
       </div>
       <div className="flex justify-center mt-6 flex-wrap items-center">
         {videoList?.map((video) => (
-          <VideoCard id={video._id} src={video.thumbnail} name={video.title} />
+          <VideoCard key={video._id} id={video._id} src={video.thumbnail} name={video.title} />
         ))}
       </div>
     </div>

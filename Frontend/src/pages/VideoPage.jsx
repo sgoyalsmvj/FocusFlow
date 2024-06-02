@@ -5,12 +5,9 @@ import TimerNavbar from "../components/TimerNavbar";
 const VideoPage = () => {
   const [video, setVideo] = useState(null);
   const { id } = useParams();
-  //     useEffect(()=>{
-  //         axios.get(`/student/getVideo/${id}`).then((res)=>setVideo(res.data))
-  //     },[])
   return (
     <div>
-      <TimerNavbar />
+      <TimerNavbar  />
       <div className="w-2/3  m-9">
         {" "}
         <video

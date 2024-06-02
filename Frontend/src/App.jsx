@@ -24,7 +24,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/creator/profile" element={<CreatorProfile />} />
         <Route
-          path="/student/videoBrowse/:keywords"
+          path="/student/videoBrowse/:keywords/:id"
           element={<StudentVideosBrowse />}
         />
         <Route path="/video/:id" element={<VideoPage />} />
