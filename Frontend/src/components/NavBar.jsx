@@ -1,17 +1,23 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
 
 const NavBar = () => {
   // Destructure authUser and isLoggedIn from the AuthContext
   const { authUser, setAuthUser, setIsLoggenIn, isLoggedIn } = useAuth();
+  const [redirect,setRedirect] = useState(false);
   const handleLogout = () => {
     axios.get("/auth/logout").then((res) => {
       setAuthUser(null);
       setIsLoggenIn(false);
+      setRedirect(true);
     });
   };
+  if(redirect){
+    <Navigate to={'/login'}/>
+  }
+
   return (
     // Navbar container with styling
     <div className="bg-gray-850 border-b-[0.075rem] font-mono border-b-gray-100/10 text-white flex justify-between h-[10vh]">

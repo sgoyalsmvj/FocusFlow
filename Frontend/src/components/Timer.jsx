@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-const Timer = ({ isActive, isDone }) => {
+const Timer = ({ currentTask, isActive, isDone }) => {
   const [seconds, setSeconds] = useState(() => {
-    const savedSeconds = localStorage.getItem('timerSeconds');
-    return savedSeconds ? JSON.parse(savedSeconds) : 0;
+    const savedTask = JSON.parse(localStorage.getItem(currentTask));
+    return savedTask ? savedTask.seconds : 0;
   });
 
   useEffect(() => {
@@ -13,32 +13,31 @@ const Timer = ({ isActive, isDone }) => {
       timer = setInterval(() => {
         setSeconds((prevSeconds) => {
           const newSeconds = prevSeconds + 1;
-          localStorage.setItem('timerSeconds', JSON.stringify(newSeconds));
+          const savedTask = JSON.parse(localStorage.getItem(currentTask)) || {};
+          savedTask.seconds = newSeconds;
+          localStorage.setItem(currentTask, JSON.stringify(savedTask));
           return newSeconds;
         });
       }, 1000);
     }
 
     return () => clearInterval(timer);
-  }, [isActive]);
+  }, [isActive, currentTask]);
 
   useEffect(() => {
     if (isDone) {
-      localStorage.removeItem('timerSeconds');
+      const savedTask = JSON.parse(localStorage.getItem(currentTask)) || {};
+      savedTask.isDone = true;
+      localStorage.setItem(currentTask, JSON.stringify(savedTask));
     }
-  }, [isDone]);
+  }, [isDone, currentTask]);
 
-  const formatTime = useCallback((timeInSeconds) => {
-    const hours = Math.floor(timeInSeconds / 3600);
-    const minutes = Math.floor((timeInSeconds % 3600) / 60);
-    const seconds = Math.floor(timeInSeconds % 60);
-
-    const pad = (value) => {
-      return value < 10 ? '0' + value : value;
-    };
-
-    return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
-  }, []);
+  const formatTime = (time) => {
+    const hours = Math.floor(time / 3600).toString().padStart(2, "0");
+    const minutes = Math.floor((time % 3600) / 60).toString().padStart(2, "0");
+    const seconds = (time % 60).toString().padStart(2, "0");
+    return `${hours}:${minutes}:${seconds}`;
+  };
 
   if (isDone) {
     return (

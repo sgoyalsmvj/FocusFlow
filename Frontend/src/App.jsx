@@ -24,10 +24,10 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/creator/profile" element={<CreatorProfile />} />
         <Route
-          path="/student/videoBrowse/:keywords/:id"
+          path="/student/videoBrowse/:keywords/:taskId"
           element={<StudentVideosBrowse />}
         />
-        <Route path="/video/:id" element={<VideoPage />} />
+        <Route path="/video/:taskId/:videoId" element={<VideoPage />} />
       </Routes>
     </AuthProvider>
   );

@@ -10,6 +10,6 @@ const authRoutes = Router();
 
 authRoutes.post("/register", register);
 authRoutes.post("/login", login);
-authRoutes.post("/logout", logout);
+authRoutes.get("/logout", logout);
 authRoutes.get("/profile", isAuthenticated, getProfile);
 export default authRoutes;

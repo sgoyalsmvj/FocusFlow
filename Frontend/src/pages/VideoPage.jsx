@@ -1,17 +1,23 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import TimerNavbar from "../components/TimerNavbar";
+import axios from "axios";
+
 const VideoPage = () => {
+  const { taskId, videoId } = useParams();
   const [video, setVideo] = useState(null);
-  const { id } = useParams();
+  useEffect(() => {
+    axios.get(`/student/getVideo/${videoId}`).then((res) => {
+      console.log(res.data);
+      setVideo(res.data.video)
+    });
+  },[]);
   return (
     <div>
-      <TimerNavbar  />
-      <div className="w-2/3  m-9">
-        {" "}
+      <TimerNavbar currentTask={taskId} />
+      <div className="w-2/3 m-9">
         <video
-          src="https://focus-flow-uploads.s3.eu-north-1.amazonaws.com/uploads/1717089762894-20230831_235302.mp4"
+          src={video.src}
           controls
           muted
         ></video>
