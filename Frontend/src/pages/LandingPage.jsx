@@ -97,23 +97,31 @@ const LandingPage = () => {
           {listTask.map((task, index) => (
             <div
               key={index}
-              className="cursor-default h-[40px] w-full font-mono text-lg flex justify-between items-center text-white border-[0.075rem] border-gray-100/10"
+              className="rounded-md cursor-default h-[40px] w-full font-mono text-lg flex justify-between items-center text-white border-[0.075rem] border-gray-100/10"
             >
               <Link
-                to={`/student/videoBrowse/${encodeURIComponent(task.name)}`}
+                to={`/student/videoBrowse/${encodeURIComponent(task.name)}/${task._id}`}
               >
-                <span className={` ${
-                  task.status === "pending" ? "text-red-400" : "text-green-500"
-                } ml-4`}>{task.name}</span>
+                <span
+                  className={` ${
+                    task.status === "pending"
+                      ? "text-red-400"
+                      : "text-green-500"
+                  } ml-4`}
+                >
+                  {task.name}
+                </span>
               </Link>
-              
-              <span className="mr-2">{formatTime(task.timer)}</span>
-              <button
-                onClick={() => handleDeleteTask(task._id)}
-                className="mr-4"
-              >
-                <MdOutlineDelete />
-              </button>
+
+              <div className="flex justify-center items-center">
+                <span className="mr-2">{formatTime(task.timer)}</span>
+                <button
+                  onClick={() => handleDeleteTask(task._id)}
+                  className="m-4 bg-gray-600 p-1 rounded-full"
+                >
+                  <MdOutlineDelete />
+                </button>
+              </div>
             </div>
           ))}
         </div>

@@ -43,6 +43,31 @@ export const getTasks = async (req, res) => {
   }
 };
 
+export const updateTask = async (req, res) => {
+  const { id } = req.params;
+  const { timer, isActive, isDone } = req.body;
+
+  try {
+    const task = await Task.findById(id);
+
+    if (!task) {
+      return res.status(404).json({ message: 'Task not found' });
+    }
+
+    task.timer = timer;
+    if(isDone === true) {
+      task.status = "completed";
+    }
+
+    await task.save();
+
+    res.json({ message: 'Task updated successfully', task });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
 
 export const deleteTask = async (req, res) => {
   const id = req.params.id;

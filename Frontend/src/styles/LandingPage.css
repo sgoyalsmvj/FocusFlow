@@ -20,7 +20,7 @@
     white-space: nowrap;
     overflow: hidden;
     animation: 
-        typing 5s infinite ,
+        typing 5s ease  ,
         cursor .2s infinite alternate;
 }
 
