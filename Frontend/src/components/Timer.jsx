@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 const Timer = ({ currentTask, isActive, isDone }) => {
   const [seconds, setSeconds] = useState(() => {
     const savedTask = JSON.parse(localStorage.getItem(currentTask));
-    return savedTask ? savedTask.seconds : 0;
+    return savedTask && savedTask.seconds ? savedTask.seconds : 0;
   });
 
   useEffect(() => {
