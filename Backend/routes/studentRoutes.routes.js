@@ -20,6 +20,6 @@ studentRoutes.get(
   isAuthenticated,
   getVideosRelatedToTask
 );
-studentRoutes.get("/getVideo/:id", isAuthenticated, getVideo);
+studentRoutes.get("/getVideo/:videoId", isAuthenticated, getVideo);
 
 export default studentRoutes;
