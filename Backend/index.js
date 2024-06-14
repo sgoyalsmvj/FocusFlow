@@ -24,7 +24,7 @@ app.use('/api/creator', creatorRoutes);
 app.use('/api/student', studentRoutes);
 app.use('/api/auth', authRoutes);
 
-app.listen(3000, () => {
+app.listen(process.env.PORT || 3000, () => {
   connectToMongoDB();
   console.log('Server is running on port 3000');
 })
