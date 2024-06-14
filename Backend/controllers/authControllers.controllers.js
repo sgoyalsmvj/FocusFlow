@@ -18,8 +18,7 @@ export const register = async (req, res) => {
       const options = {
         expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         httpOnly: true,
-        secure:true,
-        sameSite: 'none',
+        withCredentials: true,
       };
 
       res.status(200).cookie("token", token, options).json({ creator, token });
@@ -36,8 +35,7 @@ export const register = async (req, res) => {
       const options = {
         expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         httpOnly: true,
-        secure:true,
-        sameSite: 'none',
+        withCredentials: true,
       };
 
       res.status(200).cookie("token", token, options).json({ student, token });
@@ -65,9 +63,9 @@ export const login = async (req, res) => {
       }
       const token = creator.generateToken();
       const options = {
-        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),  
+        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         samesite: "none",
-        secure:true,
+        withCredentials: true,
       };
 
       res.status(200).cookie("token", token, options).json({ creator, token });
@@ -86,7 +84,7 @@ export const login = async (req, res) => {
       const options = {
         expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         samesite: "none",
-        secure:true,
+        withCredentials: true,
       };
 
       res.status(200).cookie("token", token, options).json({ student, token });
@@ -96,7 +94,7 @@ export const login = async (req, res) => {
   }
 };
 
-export const logout = async (req,res) => {
+export const logout = async (req, res) => {
   try {
     res
       .status(200)
