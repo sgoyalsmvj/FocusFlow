@@ -18,6 +18,7 @@ export const register = async (req, res) => {
       const options = {
         expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         httpOnly: true,
+        secure: true,
       };
 
       res.status(200).cookie("token", token, options).json({ creator, token });
@@ -34,6 +35,7 @@ export const register = async (req, res) => {
       const options = {
         expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         httpOnly: true,
+        secure: true,
       };
 
       res.status(200).cookie("token", token, options).json({ student, token });
