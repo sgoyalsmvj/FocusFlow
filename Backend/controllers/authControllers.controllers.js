@@ -18,7 +18,8 @@ export const register = async (req, res) => {
       const options = {
         expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         httpOnly: true,
-        secure: true,
+        secure:true,
+        sameSite: 'none',
       };
 
       res.status(200).cookie("token", token, options).json({ creator, token });
@@ -35,7 +36,8 @@ export const register = async (req, res) => {
       const options = {
         expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         httpOnly: true,
-        secure: true,
+        secure:true,
+        sameSite: 'none',
       };
 
       res.status(200).cookie("token", token, options).json({ student, token });
@@ -65,7 +67,7 @@ export const login = async (req, res) => {
       const options = {
         expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),  
         samesite: "none",
-        secure: true,
+        secure:true,
       };
 
       res.status(200).cookie("token", token, options).json({ creator, token });
@@ -84,7 +86,7 @@ export const login = async (req, res) => {
       const options = {
         expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         samesite: "none",
-        secure: true,
+        secure:true,
       };
 
       res.status(200).cookie("token", token, options).json({ student, token });
@@ -112,4 +114,3 @@ export const getProfile = (req, res) => {
     res.status(200).json(req.student);
   }
 };
-
