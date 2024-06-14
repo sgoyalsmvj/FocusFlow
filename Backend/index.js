@@ -13,13 +13,13 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: process.env.CLIENT_URL,
   credentials: true
 }));
 app.get('/', (req, res)  => {
   res.send('Hello World');
 })
-
+app.use("/uploads", express.static(__dirname + "/uploads"));
 app.use('/api/creator', creatorRoutes);
 app.use('/api/student', studentRoutes);
 app.use('/api/auth', authRoutes);
