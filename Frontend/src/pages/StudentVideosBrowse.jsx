@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import NavBar from "../components/NavBar";
 import axios from "axios";
 import TimerNavbar from "../components/TimerNavbar";
 import { Link, useParams } from "react-router-dom";
@@ -7,7 +6,7 @@ import VideoCard from "../components/VideoCard";
 
 const StudentVideosBrowse = () => {
   const { keywords, taskId } = useParams();
-  console.log(keywords)
+  console.log(keywords);
   const [videoList, setVideoList] = useState([]);
 
   useEffect(() => {

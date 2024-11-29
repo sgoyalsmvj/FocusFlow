@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from "react";
 
 const Timer = ({ currentTask, isActive, isDone }) => {
   const [seconds, setSeconds] = useState(() => {
@@ -33,21 +33,25 @@ const Timer = ({ currentTask, isActive, isDone }) => {
   }, [isDone, currentTask]);
 
   const formatTime = (time) => {
-    const hours = Math.floor(time / 3600).toString().padStart(2, "0");
-    const minutes = Math.floor((time % 3600) / 60).toString().padStart(2, "0");
+    const hours = Math.floor(time / 3600)
+      .toString()
+      .padStart(2, "0");
+    const minutes = Math.floor((time % 3600) / 60)
+      .toString()
+      .padStart(2, "0");
     const seconds = (time % 60).toString().padStart(2, "0");
     return `${hours}:${minutes}:${seconds}`;
   };
 
   if (isDone) {
     return (
-      <div className='text-4xl font-bold font-mono'>
+      <div className="text-4xl font-bold font-mono">
         The task is completed in {formatTime(seconds)}
       </div>
     );
   }
 
-  return <div className='text-4xl font-semibold'>{formatTime(seconds)}</div>;
+  return <div className="text-4xl font-semibold">{formatTime(seconds)}</div>;
 };
 
 export default Timer;

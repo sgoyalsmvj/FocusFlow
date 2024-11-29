@@ -7,7 +7,6 @@ import axios from "axios";
 import { AuthProvider } from "./context/AuthContext";
 import LandingPage from "./pages/LandingPage";
 import CreatorProfile from "./pages/CreatorProfile";
-import NavBar from "./components/NavBar";
 import StudentVideosBrowse from "./pages/StudentVideosBrowse";
 import VideoPage from "./pages/VideoPage";
 
