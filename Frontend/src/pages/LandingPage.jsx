@@ -6,7 +6,7 @@ import axios from "axios";
 import { MdOutlineDelete } from "react-icons/md";
 
 const LandingPage = () => {
-  const [listTask, setListTask] = useState([]); // Initialize as an empty array
+  const [listTask, setListTask] = useState([]);
   const [taskName, setTaskName] = useState("");
 
   const formatTime = (time) => {
@@ -67,12 +67,10 @@ const LandingPage = () => {
       <NavBar />
 
       <div className="flex flex-col items-center">
-        <div className="flex justify-center items-center">
-          <div className="rounded-4xl flex justify-center items-center h-[100px] mt-[40px]">
-            <h1 className="text text-white text-4xl">
-              What do you want to Learn Today?
-            </h1>
-          </div>
+        <div className="flex justify-center items-center rounded-4xl flex justify-center items-center h-[100px] mt-[40px]">
+          <h1 className="text text-white text-4xl">
+            What do you want to Learn Today?
+          </h1>
         </div>
 
         <div className="flex items-center mt-7">
@@ -100,7 +98,9 @@ const LandingPage = () => {
               className="rounded-md cursor-default h-[40px] w-full font-mono text-lg flex justify-between items-center text-white border-[0.075rem] border-gray-100/10"
             >
               <Link
-                to={`/student/videoBrowse/${encodeURIComponent(task.name)}/${task._id}`}
+                to={`/student/videoBrowse/${encodeURIComponent(task.name)}/${
+                  task._id
+                }`}
               >
                 <span
                   className={` ${

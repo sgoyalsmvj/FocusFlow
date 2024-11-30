@@ -6,7 +6,6 @@ import profile from "../assets/profile.jpg";
 import { BiSolidLike } from "react-icons/bi";
 import { BiSolidDislike } from "react-icons/bi";
 import { FaShare } from "react-icons/fa";
-import VideoCard from "../components/VideoCard";
 
 const VideoPage = () => {
   const { taskId, videoId } = useParams();
@@ -97,12 +96,14 @@ const VideoPage = () => {
         </div>
         <div className="w-[30%] mt-2 mr-2 ml-3 p-2">
           {suggestionVideos?.map((v) => (
-            <div className="flex mb-4">
+            <div key={v._id} className="flex mb-4">
               <div>
                 <img className="rounded-lg w-[200px]" src={v.thumbnail} />
               </div>
               <div className="ml-2 flex flex-col items-start">
-                <h1 className="text-xl">{v.title.charAt(0).toUpperCase() + v?.title?.slice(1)}</h1>
+                <h1 className="text-xl">
+                  {v.title.charAt(0).toUpperCase() + v?.title?.slice(1)}
+                </h1>
                 <h1 className="text-[1rem] font-semibold text-gray-400">
                   Harkirat
                 </h1>

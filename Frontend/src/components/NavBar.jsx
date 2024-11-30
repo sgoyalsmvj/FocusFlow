@@ -5,17 +5,17 @@ import axios from "axios";
 
 const NavBar = () => {
   // Destructure authUser and isLoggedIn from the AuthContext
-  const { authUser, setAuthUser, setIsLoggenIn, isLoggedIn } = useAuth();
-  const [redirect,setRedirect] = useState(false);
+  const { setAuthUser, setIsLoggenIn, isLoggedIn } = useAuth();
+  const [redirect, setRedirect] = useState(false);
   const handleLogout = () => {
-    axios.get("/auth/logout").then((res) => {
+    axios.get("/auth/logout").then(() => {
       setAuthUser(null);
       setIsLoggenIn(false);
       setRedirect(true);
     });
   };
-  if(redirect){
-    <Navigate to={'/login'}/>
+  if (redirect) {
+    <Navigate to={"/login"} />;
   }
 
   return (

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../components/NavBar"; // Importing the NavBar component
 import profile from "../assets/profile.jpg"; // Importing profile image
-import hq from "../assets/hqdefault.webp"; // Importing a default image
 import { HiOutlinePlus } from "react-icons/hi"; // Importing an icon from react-icons
 import VideoCard from "../components/VideoCard"; // Importing the VideoCard component
 import UploadVideoModal from "../components/UploadVideoModal"; // Importing the UploadVideoModal component
@@ -14,7 +13,7 @@ const CreatorProfile = () => {
   // State to control the modal visibility
   const [toggleModal, setToggleModal] = useState(false);
   // Destructuring authUser and isLoggedIn from useAuth context
-  const { authUser, isLoggedIn } = useAuth();
+  const { authUser } = useAuth();
 
   // Function to handle new video button click
   const addNewVideo = (ev) => {
@@ -51,14 +50,15 @@ const CreatorProfile = () => {
               {authUser?.name}
             </h1>
             <p className="w-4/5 ml-5 font-medium font-mono">
-              I'm kirat, a 2018 Computer Science undergrad from IIT Roorkee.
-              I've been part of Google's Summer of code twice and have worked at
-              FANG, Finance and Startups over the last 6 years since graduating.
+              I&apos;m kirat, a 2018 Computer Science undergrad from IIT
+              Roorkee. I&apos;ve been part of Google&apos;s Summer of code twice
+              and have worked at FANG, Finance and Startups over the last 6
+              years since graduating.
             </p>
           </div>
         </div>
         {/* Videos section */}
-        <div className="videos ">
+        <div className="videos">
           <div className="upload-button">
             <div className="ml-11 mt-5 flex space-x-2 items-center">
               <span className="text-2xl font-mono m-3 py-2 border-b-2 border-indigo-600">
