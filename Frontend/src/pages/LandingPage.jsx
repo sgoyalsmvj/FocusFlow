@@ -4,10 +4,15 @@ import "../styles/LandingPage.css";
 import NavBar from "../components/NavBar";
 import axios from "axios";
 import { MdOutlineDelete } from "react-icons/md";
+import { useAuth } from "../context/AuthContext";
+import TechCard from "../components/TechCard.jsx";
+import TopVideos from "../components/TopVideos.jsx";
+import TopCreators from "../components/TopCreators.jsx";
 
 const LandingPage = () => {
   const [listTask, setListTask] = useState([]);
   const [taskName, setTaskName] = useState("");
+  const { isLoggedIn } = useAuth();
 
   const formatTime = (time) => {
     const hours = Math.floor(time / 3600)
@@ -24,7 +29,7 @@ const LandingPage = () => {
     ev.preventDefault();
     if (taskName.trim() !== "") {
       axios
-        .post("/student/addnewtask", { name: taskName })
+        .post("api/student/addnewtask", { name: taskName })
         .then((res) => {
           const newTask = res.data.task;
           setListTask((prev) => [...prev, newTask]);
@@ -38,7 +43,7 @@ const LandingPage = () => {
 
   const handleDeleteTask = (id) => {
     axios
-      .delete(`/student/deleteTask/${id}`)
+      .delete(`api/student/deleteTask/${id}`)
       .then(() => {
         setListTask((prev) => prev.filter((task) => task._id !== id));
       })
@@ -48,18 +53,20 @@ const LandingPage = () => {
   };
 
   useEffect(() => {
-    axios
-      .get("/student/gettasks")
-      .then((res) => {
-        const tasks = res.data.list.map((task) => ({
-          ...task,
-          timer: task.timer || 0, // Ensure each task has a timer property
-        }));
-        setListTask(tasks);
-      })
-      .catch((err) => {
-        console.error("Error fetching tasks:", err);
-      });
+    if (isLoggedIn) {
+      axios
+        .get("api/student/gettasks")
+        .then((res) => {
+          const tasks = res.data.list.map((task) => ({
+            ...task,
+            timer: task.timer || 0, // Ensure each task has a timer property
+          }));
+          setListTask(tasks);
+        })
+        .catch((err) => {
+          console.error("Error fetching tasks:", err);
+        });
+    }
   }, []);
 
   return (
@@ -72,7 +79,7 @@ const LandingPage = () => {
             What do you want to Learn Today?
           </h1>
         </div>
-
+        <TechCard />
         <div className="flex items-center mt-7">
           <input
             className="h-[40px] w-[320px] rounded-l-lg pl-2 font-mono text-black text-lg"
@@ -87,45 +94,56 @@ const LandingPage = () => {
           </button>
         </div>
 
-        <div
-          id="taskArea"
-          className="overflow-y-auto h-max w-[500px] space-y-2 border-[0.075rem] border-gray-100/10 mt-4 p-1"
-          style={{ scrollbarWidth: "thin", scrollbarColor: "gray transparent" }}
-        >
-          {listTask.map((task, index) => (
-            <div
-              key={index}
-              className="rounded-md cursor-default h-[40px] w-full font-mono text-lg flex justify-between items-center text-white border-[0.075rem] border-gray-100/10"
-            >
-              <Link
-                to={`/student/videoBrowse/${encodeURIComponent(task.name)}/${
-                  task._id
-                }`}
+        {isLoggedIn && listTask.length > 0 ? (
+          <div
+            id="taskArea"
+            className="overflow-y-auto h-max w-[500px] space-y-2 border-[0.075rem] border-gray-100/10 mt-4 p-1"
+            style={{
+              scrollbarWidth: "thin",
+              scrollbarColor: "gray transparent",
+            }}
+          >
+            {listTask.map((task, index) => (
+              <div
+                key={index}
+                className="rounded-md cursor-default h-[40px] w-full font-mono text-lg flex justify-between items-center text-white border-[0.075rem] border-gray-100/10"
               >
-                <span
-                  className={` ${
-                    task.status === "pending"
-                      ? "text-red-400"
-                      : "text-green-500"
-                  } ml-4`}
+                <Link
+                  to={`/student/videoBrowse/${encodeURIComponent(task.name)}/${
+                    task._id
+                  }`}
                 >
-                  {task.name}
-                </span>
-              </Link>
+                  <span
+                    className={` ${
+                      task.status === "pending"
+                        ? "text-red-400"
+                        : "text-green-500"
+                    } ml-4`}
+                  >
+                    {task.name}
+                  </span>
+                </Link>
 
-              <div className="flex justify-center items-center">
-                <span className="mr-2">{formatTime(task.timer)}</span>
-                <button
-                  onClick={() => handleDeleteTask(task._id)}
-                  className="m-4 bg-gray-600 p-1 rounded-full"
-                >
-                  <MdOutlineDelete />
-                </button>
+                <div className="flex justify-center items-center">
+                  <span className="mr-2">{formatTime(task.timer)}</span>
+                  <button
+                    onClick={() => handleDeleteTask(task._id)}
+                    className="m-4 bg-gray-600 p-1 rounded-full"
+                  >
+                    <MdOutlineDelete />
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : null}
       </div>
+      {isLoggedIn ? (
+        <div className="mt-24">
+          <TopVideos />
+          <TopCreators />
+        </div>
+      ) : null}
     </div>
   );
 };

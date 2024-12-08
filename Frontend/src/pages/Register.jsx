@@ -18,7 +18,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Send a POST request to register endpoint with form data
-    const response = await axios.post("/auth/register", {
+    const response = await axios.post("api/auth/register", {
       name,
       email,
       password,

@@ -8,7 +8,7 @@ const NavBar = () => {
   const { setAuthUser, setIsLoggenIn, isLoggedIn } = useAuth();
   const [redirect, setRedirect] = useState(false);
   const handleLogout = () => {
-    axios.get("/auth/logout").then(() => {
+    axios.get("api/auth/logout").then(() => {
       setAuthUser(null);
       setIsLoggenIn(false);
       setRedirect(true);

@@ -1,5 +1,6 @@
 import axios from "axios"; // Import axios for making HTTP requests
 import React, { useState, useEffect, useContext, createContext } from "react";
+import PropTypes from "prop-types";
 
 // Create a context for authentication
 const AuthContext = createContext();
@@ -20,7 +21,7 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     // Make a GET request to fetch the user's profile
     axios
-      .get("/auth/profile")
+      .get("api/auth/profile")
       .then((res) => {
         setAuthUser(res.data); // Set the authenticated user's data
         setIsLoggedIn(true); // Set isLoggedIn to true
@@ -41,3 +42,7 @@ export function AuthProvider({ children }) {
   // Return the provider component with the value prop
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
+
+AuthProvider.propTypes = {
+  children: PropTypes.node,
+};

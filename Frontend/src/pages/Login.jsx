@@ -30,7 +30,7 @@ const Login = () => {
     console.log("Login");
     try {
       // Send a POST request to login endpoint
-      const response = await axios.post("/auth/login", {
+      const response = await axios.post("api/auth/login", {
         email,
         password,
         role,
