@@ -3,37 +3,37 @@ import axios from "axios";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-const Login = () => {
-  // State variables to hold email, password, role, and redirect path
+const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("");
+  const [error, setError] = useState("");
+  const [selectedRole, setSelectedRole] = useState(""); // Default role
+  const { setAuthUser, setIsLoggedIn } = useAuth();
   const [redirect, setRedirect] = useState(null);
 
-  // Retrieve context methods from AuthContext
-  const { setAuthUser, setIsLoggedIn } = useAuth();
-
-  // Handlers for setting the role
-  const creatorRole = (ev) => {
-    ev.preventDefault();
-    setRole("creator");
-  };
-
-  const studentRole = (ev) => {
-    ev.preventDefault();
-    setRole("student");
-  };
-
-  // Handle form submission
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("Login");
+    if (!email || !password) {
+      setError("Both fields are required.");
+      setTimeout(() => {
+        setError("");
+      }, [1000]);
+      return;
+    }
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      setError("Please enter a valid email address.");
+      setTimeout(() => {
+        setError("");
+      }, [1000]);
+      return;
+    }
+    // Simulate login (replace with actual API call)
     try {
       // Send a POST request to login endpoint
       const response = await axios.post("api/auth/login", {
         email,
         password,
-        role,
+        selectedRole,
       });
       console.log(response.data);
 
@@ -42,7 +42,7 @@ const Login = () => {
         console.log("no student");
         setIsLoggedIn(true);
         setAuthUser(response.data.creator);
-        setRedirect("/creator/profile"); // Redirect to creator profile page
+        setRedirect("api/creator/profile"); // Redirect to creator profile page
       } else if (response.data.creator == null) {
         console.log("no creator");
         setIsLoggedIn(true);
@@ -52,69 +52,116 @@ const Login = () => {
     } catch (error) {
       console.error("Error during login:", error);
     }
+    setError(""); // Clear errors if all fields are valid
   };
 
-  // Redirect to the specified path if redirect state is set
   if (redirect) {
     return <Navigate to={redirect} />;
   }
 
   return (
-    <div className="text-white text-center flex flex-col justify-center items-center">
-      <div className="m-20 w-max font-mono">
-        <h1 className="text-3xl mb-7">Sign In To FocusFlow</h1>
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col items-start m-5 p-5 rounded-lg font-light h-max w-[350px] bg-[#161b22] border border-gray-700 outline-[1px]"
-        >
-          <label className="my-2">Username or Email Address</label>
-          <input
-            className="mb-3 w-full rounded-md border border-gray-600 bg-[#0d1117] p-1 focus:border-blue-600 focus:outline-none text-white"
-            type="text"
-            name="email"
-            onChange={(e) => setEmail(e.target.value)}
-          />
+    <div className="flex justify-center items-center min-h-screen bg-[#0d1117]">
+      <div className="bg-[#161b22] p-8 rounded-lg shadow-lg w-full max-w-md border border-gray-700">
+        {/* Logo */}
+        <h1 className="text-3xl font-bold text-center mb-6">FocusFlow</h1>
 
-          <label className="my-2">Password</label>
-          <input
-            className="mb-3 w-full rounded-md border border-gray-600 bg-[#0d1117] p-1 focus:border-blue-600 focus:outline-none text-white"
-            type="password"
-            name="password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-600 text-white p-3 rounded mb-4 text-center">
+            {error}
+          </div>
+        )}
 
-          <label className="my-2">Role</label>
-          <div className="flex flex-row mb-2 space-x-3 w-full">
+        {/* Login Form */}
+        <form onSubmit={handleLogin} className="space-y-6">
+          {/* Email Input */}
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium">
+              Email Address
+            </label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email"
+              className="w-full px-4 py-2 mt-2 bg-[#0d1117] border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-600"
+            />
+          </div>
+
+          {/* Password Input */}
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium">
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your password"
+              className="w-full px-4 py-2 mt-2 bg-[#0d1117] border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-600"
+            />
+          </div>
+
+          {/* Role Selection */}
+          <div className="flex justify-center space-x-4 mt-4">
             <button
-              onClick={creatorRole}
-              className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 font-mono font-bold text-lg"
-            >
-              Creator
-            </button>
-            <button
-              onClick={studentRole}
-              className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 font-mono font-bold text-lg"
+              type="button"
+              onClick={() => setSelectedRole("Student")}
+              className={`w-1/2 px-4 py-2 font-semibold border ${
+                selectedRole === "Student"
+                  ? "bg-blue-600 text-white"
+                  : "bg-[#0d1117] text-gray-400 hover:bg-gray-800"
+              } rounded-lg transition duration-300`}
             >
               Student
             </button>
+            <button
+              type="button"
+              onClick={() => setSelectedRole("Creator")}
+              className={`w-1/2 px-4 py-2 font-semibold border ${
+                selectedRole === "Creator"
+                  ? "bg-blue-600 text-white"
+                  : "bg-[#0d1117] text-gray-400 hover:bg-gray-800"
+              } rounded-lg transition duration-300`}
+            >
+              Creator
+            </button>
           </div>
+
+          {/* Login Button */}
           <button
-            className="bg-[#238636] w-full my-3 p-1 font-semibold rounded-md"
             type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-500 text-white p-3 rounded font-semibold transition"
           >
             Login
           </button>
         </form>
-        <div className="border border-gray-700 rounded-md m-5 py-5 w-[350px]">
-          <p className="text-blue-500 font-semibold">Sign in with Google</p>
-          New to FocusFlow?{" "}
-          <a className="font-normal text-blue-500" href="/register">
-            Create an account
+
+        {/* Additional Options */}
+        <div className="mt-6 text-center">
+          <a
+            href="#forgot-password"
+            className="text-sm text-gray-400 hover:text-gray-200 transition"
+          >
+            Forgot Password?
           </a>
+          <div className="mt-2">
+            <span className="text-sm text-gray-400">
+              Don&apos;t have an account?{" "}
+            </span>
+            <a
+              href="#sign-up"
+              className="text-sm text-blue-500 hover:text-blue-400 font-semibold transition"
+            >
+              Sign Up
+            </a>
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default LoginPage;

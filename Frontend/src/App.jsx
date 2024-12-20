@@ -9,6 +9,9 @@ import LandingPage from "./pages/LandingPage";
 import CreatorProfile from "./pages/CreatorProfile";
 import StudentVideosBrowse from "./pages/StudentVideosBrowse";
 import VideoPage from "./pages/VideoPage";
+import ContactPage from "./pages/ContactPage";
+import Dashboard from "./pages/Dashboard";
+import AddTaskPage from "./pages/AddTaskPage";
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 axios.defaults.withCredentials = true;
@@ -20,13 +23,16 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/timer" element={<TimerNavbar />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/signup" element={<Register />} />
         <Route path="/creator/profile" element={<CreatorProfile />} />
         <Route
           path="/student/videoBrowse/:keywords/:taskId"
           element={<StudentVideosBrowse />}
         />
         <Route path="/video/:taskId/:videoId" element={<VideoPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/addtask" element={<AddTaskPage />} />
       </Routes>
     </AuthProvider>
   );

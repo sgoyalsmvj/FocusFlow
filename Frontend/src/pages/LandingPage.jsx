@@ -1,149 +1,134 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import "../styles/LandingPage.css";
-import NavBar from "../components/NavBar";
-import axios from "axios";
-import { MdOutlineDelete } from "react-icons/md";
-import { useAuth } from "../context/AuthContext";
-import TechCard from "../components/TechCard.jsx";
-import TopVideos from "../components/TopVideos.jsx";
-import TopCreators from "../components/TopCreators.jsx";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const LandingPage = () => {
-  const [listTask, setListTask] = useState([]);
-  const [taskName, setTaskName] = useState("");
-  const { isLoggedIn } = useAuth();
-
-  const formatTime = (time) => {
-    const hours = Math.floor(time / 3600)
-      .toString()
-      .padStart(2, "0");
-    const minutes = Math.floor((time % 3600) / 60)
-      .toString()
-      .padStart(2, "0");
-    const seconds = (time % 60).toString().padStart(2, "0");
-    return `${hours}:${minutes}:${seconds}`;
-  };
-
-  const handleAddButton = (ev) => {
-    ev.preventDefault();
-    if (taskName.trim() !== "") {
-      axios
-        .post("api/student/addnewtask", { name: taskName })
-        .then((res) => {
-          const newTask = res.data.task;
-          setListTask((prev) => [...prev, newTask]);
-          setTaskName("");
-        })
-        .catch((err) => {
-          console.error("Error adding task:", err);
-        });
-    }
-  };
-
-  const handleDeleteTask = (id) => {
-    axios
-      .delete(`api/student/deleteTask/${id}`)
-      .then(() => {
-        setListTask((prev) => prev.filter((task) => task._id !== id));
-      })
-      .catch((err) => {
-        console.error("Error deleting task:", err);
-      });
-  };
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      axios
-        .get("api/student/gettasks")
-        .then((res) => {
-          const tasks = res.data.list.map((task) => ({
-            ...task,
-            timer: task.timer || 0, // Ensure each task has a timer property
-          }));
-          setListTask(tasks);
-        })
-        .catch((err) => {
-          console.error("Error fetching tasks:", err);
-        });
-    }
-  }, []);
-
+  const navigate = useNavigate();
   return (
-    <div className="h-screen">
-      <NavBar />
-
-      <div className="flex flex-col items-center">
-        <div className="flex justify-center items-center rounded-4xl flex justify-center items-center h-[100px] mt-[40px]">
-          <h1 className="text text-white text-4xl">
-            What do you want to Learn Today?
-          </h1>
+    <div className="bg-[#0d1117] text-white min-h-screen">
+      {/* Header Section */}
+      <header className="bg-gray-900 p-6 shadow-lg">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          <h1 className="text-2xl font-bold">FocusFlow</h1>
+          <nav>
+            <ul className="flex space-x-6">
+              <li>
+                <a href="#features" className="hover:underline">
+                  Features
+                </a>
+              </li>
+              <li>
+                <a href="#creators" className="hover:underline">
+                  Top Educators
+                </a>
+              </li>
+              <li>
+                <a href="/contact" className="hover:underline">
+                  Contact
+                </a>
+              </li>
+            </ul>
+          </nav>
         </div>
-        <TechCard />
-        <div className="flex items-center mt-7">
-          <input
-            className="h-[40px] w-[320px] rounded-l-lg pl-2 font-mono text-black text-lg"
-            value={taskName}
-            onChange={(ev) => setTaskName(ev.target.value)}
-          />
+      </header>
+
+      {/* Hero Section */}
+      <section className="py-16 bg-gradient-to-b from-gray-900 via-[#0d1117] to-gray-800">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <h2 className="text-4xl font-bold mb-6">
+            Empower Your Learning Journey
+          </h2>
+          <p className="text-lg text-gray-300 mb-8">
+            Discover the best educators, manage your time effectively, and stay
+            focused with engaging content tailored for your growth.
+          </p>
           <button
-            className="h-[40px] w-[80px] rounded-r-lg bg-gray-500 text-lg text-white font-mono"
-            onClick={handleAddButton}
+            className="bg-blue-600 px-6 py-3 rounded-full text-white font-bold hover:bg-blue-700"
+            onClick={() => navigate("/login")}
           >
-            Add
+            Get Started
           </button>
         </div>
+      </section>
 
-        {isLoggedIn && listTask.length > 0 ? (
-          <div
-            id="taskArea"
-            className="overflow-y-auto h-max w-[500px] space-y-2 border-[0.075rem] border-gray-100/10 mt-4 p-1"
-            style={{
-              scrollbarWidth: "thin",
-              scrollbarColor: "gray transparent",
-            }}
-          >
-            {listTask.map((task, index) => (
-              <div
-                key={index}
-                className="rounded-md cursor-default h-[40px] w-full font-mono text-lg flex justify-between items-center text-white border-[0.075rem] border-gray-100/10"
-              >
-                <Link
-                  to={`/student/videoBrowse/${encodeURIComponent(task.name)}/${
-                    task._id
-                  }`}
-                >
-                  <span
-                    className={` ${
-                      task.status === "pending"
-                        ? "text-red-400"
-                        : "text-green-500"
-                    } ml-4`}
-                  >
-                    {task.name}
-                  </span>
-                </Link>
+      {/* Features Section */}
+      <section id="features" className="py-16">
+        <div className="max-w-7xl mx-auto px-6">
+          <h2 className="text-3xl font-bold mb-8 text-center">
+            Key Features of FocusFlow
+          </h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Feature 1 */}
+            <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
+              <h3 className="text-xl font-bold mb-4">Top Educators</h3>
+              <p className="text-gray-300">
+                Learn from the best minds in various fields. Our platform
+                features highly experienced educators with proven expertise.
+              </p>
+            </div>
+            {/* Feature 2 */}
+            <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
+              <h3 className="text-xl font-bold mb-4">Engaging Content</h3>
+              <p className="text-gray-300">
+                Access a wide variety of engaging and interactive video lessons,
+                articles, and quizzes designed to keep you motivated.
+              </p>
+            </div>
+            {/* Feature 3 */}
+            <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
+              <h3 className="text-xl font-bold mb-4">Focus Management</h3>
+              <p className="text-gray-300">
+                Use built-in tools to track your progress, set learning goals,
+                and maintain focus with time management features.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-                <div className="flex justify-center items-center">
-                  <span className="mr-2">{formatTime(task.timer)}</span>
-                  <button
-                    onClick={() => handleDeleteTask(task._id)}
-                    className="m-4 bg-gray-600 p-1 rounded-full"
-                  >
-                    <MdOutlineDelete />
-                  </button>
+      {/* Top Educators Section */}
+      <section id="creators" className="py-16 bg-gray-900">
+        <div className="max-w-7xl mx-auto px-6">
+          <h2 className="text-3xl font-bold mb-8 text-center">Top Educators</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {/* Educator Cards */}
+            {["Alice", "Bob", "Charlie", "Diana"].map((name, index) => (
+              <div key={index} className="flex flex-col items-center">
+                <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-blue-600 mb-4">
+                  <img
+                    src={`https://via.placeholder.com/150?text=${name}`}
+                    alt={name}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
+                <p className="font-semibold">{name}</p>
               </div>
             ))}
           </div>
-        ) : null}
-      </div>
-      {isLoggedIn ? (
-        <div className="mt-24">
-          <TopVideos />
-          <TopCreators />
         </div>
-      ) : null}
+      </section>
+
+      {/* Call to Action Section */}
+      <section className="py-16 bg-gradient-to-b from-gray-800 to-gray-900 text-center">
+        <h2 className="text-3xl font-bold mb-6">Ready to Start Learning?</h2>
+        <p className="text-gray-300 mb-8">
+          Join thousands of learners achieving their goals with FocusFlow.
+        </p>
+        <button
+          className="bg-blue-600 px-6 py-3 rounded-full text-white font-bold hover:bg-blue-700"
+          onClick={() => navigate("/signup")}
+        >
+          Sign Up Now
+        </button>
+      </section>
+
+      {/* Footer Section */}
+      <footer className="bg-gray-900 py-6">
+        <div className="max-w-7xl mx-auto px-6 text-center">
+          <p className="text-gray-400">
+            &copy; {new Date().getFullYear()} FocusFlow. All Rights Reserved.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 };
