@@ -1,32 +1,29 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import axios from "axios";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [selectedRole, setSelectedRole] = useState("");
-  const { setAuthUser, setIsAuthenticated } = useAuth();
-  const [redirect, setRedirect] = useState(null);
+  const [redirect, setRedirect] = useState(false);
+  const { login, setAuthUser, setIsAuthenticated } = useAuth();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     if (!email || !password) {
       setError("Both fields are required.");
-      setTimeout(() => {
-        setError("");
-      }, [1000]);
+      setTimeout(() => setError(""), 1000);
       return;
     }
     if (!/\S+@\S+\.\S+/.test(email)) {
       setError("Please enter a valid email address.");
-      setTimeout(() => {
-        setError("");
-      }, [1000]);
+      setTimeout(() => setError(""), 1000);
       return;
     }
+
     try {
       const response = await axios.post("api/auth/login", {
         email,
@@ -34,23 +31,24 @@ const LoginPage = () => {
         selectedRole,
       });
 
-      if (response.data.student == null) {
-        setIsAuthenticated(true);
-        setAuthUser(response.data.creator);
-        setRedirect("api/creator/profile");
-      } else if (response.data.creator == null) {
-        setIsAuthenticated(true);
+      if (response.data.student) {
         setAuthUser(response.data.student);
+        setIsAuthenticated(true);
         setRedirect("/addtask");
+      } else if (response.data.creator) {
+        setAuthUser(response.data.creator);
+        setIsAuthenticated(true);
+        setRedirect("/creator/profile");
       }
     } catch (error) {
       console.error("Error during login:", error);
+      setError("Login failed. Please try again.");
+      setTimeout(() => setError(""), 1000);
     }
-    setError("");
   };
 
   if (redirect) {
-    return <Navigate to={redirect} />;
+    return <Navigate to={redirect} replace />;
   }
 
   return (
@@ -135,7 +133,7 @@ const LoginPage = () => {
           </a>
           <div className="mt-2">
             <span className="text-sm text-gray-400">
-              Don&apos;t have an account?{" "}
+              Don't have an account?{" "}
             </span>
             <a
               href="#sign-up"

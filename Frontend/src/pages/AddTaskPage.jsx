@@ -6,7 +6,6 @@ import Navbar from "../components/NavBar";
 
 const TechLearningPage = () => {
   const allTechStacks = [
-    // Web Technologies
     "HTML",
     "CSS",
     "JavaScript",
@@ -27,8 +26,6 @@ const TechLearningPage = () => {
     "Styled Components",
     "Material UI",
     "Chakra UI",
-
-    // Backend Technologies
     "Node.js",
     "Express.js",
     "Nest.js",
@@ -43,8 +40,6 @@ const TechLearningPage = () => {
     "GraphQL",
     "Apollo",
     "gRPC",
-
-    // Databases
     "MongoDB",
     "PostgreSQL",
     "MySQL",
@@ -58,8 +53,6 @@ const TechLearningPage = () => {
     "Elasticsearch",
     "CouchDB",
     "Neo4j",
-
-    // Cloud & DevOps
     "Docker",
     "Kubernetes",
     "AWS",
@@ -73,8 +66,6 @@ const TechLearningPage = () => {
     "Ansible",
     "Nginx",
     "Apache",
-
-    // Programming Languages
     "Python",
     "Java",
     "C++",
@@ -89,8 +80,6 @@ const TechLearningPage = () => {
     "R",
     "Haskell",
     "Clojure",
-
-    // Mobile Development
     "React Native",
     "Flutter",
     "Ionic",
@@ -99,8 +88,6 @@ const TechLearningPage = () => {
     "Kotlin Multiplatform",
     "PhoneGap",
     "Cordova",
-
-    // Other Technologies
     "WebAssembly",
     "Blockchain",
     "TensorFlow",
@@ -136,16 +123,14 @@ const TechLearningPage = () => {
   const [selectedTechStacks, setSelectedTechStacks] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const navigate = useNavigate();
-  const { setAuthUser, setIsLoggenIn, authUser } = useAuth();
+  const { setAuthUser, setIsAuthenticated, authUser } = useAuth();
 
   const maxTechStacks = 5;
 
-  // Typing animation effect
   useEffect(() => {
     const text = "What do you want to learn today?";
     let i = 0;
 
-    // Reset typed text at the start of the effect
     setTypedText("");
 
     const interval = setInterval(() => {
@@ -160,7 +145,6 @@ const TechLearningPage = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Update suggestions based on search text
   useEffect(() => {
     if (searchText.trim() === "") {
       setSuggestions([]);
@@ -172,7 +156,6 @@ const TechLearningPage = () => {
     setSuggestions(filtered);
   }, [searchText]);
 
-  // Remove tech stack
   const removeTechStack = (tech) => {
     setSelectedTechStacks((prev) => prev.filter((t) => t !== tech));
   };
@@ -180,7 +163,7 @@ const TechLearningPage = () => {
   const handleLogout = () => {
     axios.get("api/auth/logout").then(() => {
       setAuthUser(null);
-      setIsLoggenIn(false);
+      setIsAuthenticated(false);
     });
     navigate("/");
   };
