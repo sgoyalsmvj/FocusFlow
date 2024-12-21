@@ -1,8 +1,8 @@
 import React from "react";
 
 const Dashboard = () => {
-  const userName = "John Doe"; // Replace with dynamic data
-  const progress = 65; // Progress percentage, dynamic data
+  const userName = "John Doe";
+  const progress = 65;
   const recommendedContent = [
     {
       id: 1,
@@ -23,7 +23,6 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-[#0d1117] text-white">
-      {/* Header */}
       <div className="p-6 border-b border-gray-700">
         <h1 className="text-3xl font-bold">Welcome back, {userName}!</h1>
         <p className="text-gray-400 mt-2">
@@ -31,9 +30,7 @@ const Dashboard = () => {
         </p>
       </div>
 
-      {/* Main Content */}
       <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Progress Tracker */}
         <div className="bg-gray-800 p-4 rounded-lg shadow">
           <h2 className="text-xl font-semibold mb-4">Your Progress</h2>
           <div className="relative h-4 bg-gray-700 rounded">
@@ -45,7 +42,6 @@ const Dashboard = () => {
           <p className="mt-2 text-gray-400">{progress}% completed</p>
         </div>
 
-        {/* Recommended Content */}
         <div className="bg-gray-800 p-4 rounded-lg shadow">
           <h2 className="text-xl font-semibold mb-4">Recommended for You</h2>
           <div className="flex overflow-x-scroll gap-4">
@@ -67,7 +63,6 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Quick Navigation */}
         <div className="bg-gray-800 p-4 rounded-lg shadow">
           <h2 className="text-xl font-semibold mb-4">Quick Navigation</h2>
           <div className="flex flex-col space-y-2">
@@ -83,7 +78,6 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Upcoming Tasks */}
         <div className="bg-gray-800 p-4 rounded-lg shadow">
           <h2 className="text-xl font-semibold mb-4">Upcoming Tasks</h2>
           <ul className="text-gray-400">
@@ -102,7 +96,6 @@ const Dashboard = () => {
           </ul>
         </div>
 
-        {/* Announcements */}
         <div className="bg-gray-800 p-4 rounded-lg shadow">
           <h2 className="text-xl font-semibold mb-4">Announcements</h2>
           <p className="text-gray-400">

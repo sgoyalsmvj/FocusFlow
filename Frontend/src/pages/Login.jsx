@@ -7,8 +7,8 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [selectedRole, setSelectedRole] = useState(""); // Default role
-  const { setAuthUser, setIsLoggedIn } = useAuth();
+  const [selectedRole, setSelectedRole] = useState("");
+  const { setAuthUser, setIsAuthenticated } = useAuth();
   const [redirect, setRedirect] = useState(null);
 
   const handleLogin = async (e) => {
@@ -27,9 +27,7 @@ const LoginPage = () => {
       }, [1000]);
       return;
     }
-    // Simulate login (replace with actual API call)
     try {
-      // Send a POST request to login endpoint
       const response = await axios.post("api/auth/login", {
         email,
         password,
@@ -37,22 +35,21 @@ const LoginPage = () => {
       });
       console.log(response.data);
 
-      // Check the role of the logged-in user and set the appropriate state
       if (response.data.student == null) {
         console.log("no student");
-        setIsLoggedIn(true);
+        setIsAuthenticated(true);
         setAuthUser(response.data.creator);
-        setRedirect("api/creator/profile"); // Redirect to creator profile page
+        setRedirect("api/creator/profile");
       } else if (response.data.creator == null) {
         console.log("no creator");
-        setIsLoggedIn(true);
+        setIsAuthenticated(true);
         setAuthUser(response.data.student);
-        setRedirect("/"); // Redirect to landing page
+        setRedirect("/addtask");
       }
     } catch (error) {
       console.error("Error during login:", error);
     }
-    setError(""); // Clear errors if all fields are valid
+    setError("");
   };
 
   if (redirect) {
@@ -62,19 +59,15 @@ const LoginPage = () => {
   return (
     <div className="flex justify-center items-center min-h-screen bg-[#0d1117]">
       <div className="bg-[#161b22] p-8 rounded-lg shadow-lg w-full max-w-md border border-gray-700">
-        {/* Logo */}
         <h1 className="text-3xl font-bold text-center mb-6">FocusFlow</h1>
 
-        {/* Error Message */}
         {error && (
           <div className="bg-red-600 text-white p-3 rounded mb-4 text-center">
             {error}
           </div>
         )}
 
-        {/* Login Form */}
         <form onSubmit={handleLogin} className="space-y-6">
-          {/* Email Input */}
           <div>
             <label htmlFor="email" className="block text-sm font-medium">
               Email Address
@@ -89,7 +82,6 @@ const LoginPage = () => {
             />
           </div>
 
-          {/* Password Input */}
           <div>
             <label htmlFor="password" className="block text-sm font-medium">
               Password
@@ -104,7 +96,6 @@ const LoginPage = () => {
             />
           </div>
 
-          {/* Role Selection */}
           <div className="flex justify-center space-x-4 mt-4">
             <button
               type="button"
@@ -130,7 +121,6 @@ const LoginPage = () => {
             </button>
           </div>
 
-          {/* Login Button */}
           <button
             type="submit"
             className="w-full bg-blue-600 hover:bg-blue-500 text-white p-3 rounded font-semibold transition"
@@ -139,7 +129,6 @@ const LoginPage = () => {
           </button>
         </form>
 
-        {/* Additional Options */}
         <div className="mt-6 text-center">
           <a
             href="#forgot-password"

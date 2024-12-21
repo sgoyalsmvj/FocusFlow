@@ -1,11 +1,46 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { useAuth } from "../context/AuthContext";
+import { Navigate } from "react-router-dom";
 
 const SignUp = () => {
   const [role, setRole] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [redirect, setRedirect] = useState(false);
+
+  const { setAuthUser, setIsAuthenticated } = useAuth();
 
   const handleRoleSelection = (selectedRole) => {
     setRole(selectedRole);
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const response = await axios.post("api/auth/register", {
+      name,
+      email,
+      password,
+      role,
+    });
+
+    if (response.data.student == null) {
+      console.log("no student");
+      setIsAuthenticated(true);
+      setAuthUser(response.data.creator);
+      setRedirect("/creator/profile");
+    } else if (response.data.creator == null) {
+      console.log("no creator");
+      setIsAuthenticated(true);
+      setAuthUser(response.data.student);
+      setRedirect("/addtask");
+    }
+  };
+
+  if (redirect) {
+    return <Navigate to={`${redirect}`} />;
+  }
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-[#0d1117]">
@@ -14,12 +49,11 @@ const SignUp = () => {
           Create Your Account
         </h2>
 
-        {/* Role Selection */}
         <div className="flex justify-between mb-6">
           <button
-            onClick={() => handleRoleSelection("Student")}
+            onClick={() => handleRoleSelection("student")}
             className={`w-1/2 px-4 py-2 font-semibold border ${
-              role === "Student"
+              role === "student"
                 ? "bg-blue-600 text-white"
                 : "bg-[#0d1117] text-gray-400 hover:bg-gray-800"
             } rounded-l-lg transition duration-300`}
@@ -27,9 +61,9 @@ const SignUp = () => {
             Student
           </button>
           <button
-            onClick={() => handleRoleSelection("Creator")}
+            onClick={() => handleRoleSelection("creator")}
             className={`w-1/2 px-4 py-2 font-semibold border ${
-              role === "Creator"
+              role === "creator"
                 ? "bg-blue-600 text-white"
                 : "bg-[#0d1117] text-gray-400 hover:bg-gray-800"
             } rounded-r-lg transition duration-300`}
@@ -38,8 +72,7 @@ const SignUp = () => {
           </button>
         </div>
 
-        {/* Sign Up Form */}
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label
               htmlFor="name"
@@ -52,6 +85,7 @@ const SignUp = () => {
               id="name"
               placeholder="Enter your name"
               className="w-full px-4 py-2 mt-2 bg-[#0d1117] border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-600"
+              onChange={(e) => setName(e.target.value)}
             />
           </div>
 
@@ -67,6 +101,7 @@ const SignUp = () => {
               id="email"
               placeholder="Enter your email"
               className="w-full px-4 py-2 mt-2 bg-[#0d1117] border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-600"
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
@@ -82,6 +117,7 @@ const SignUp = () => {
               id="password"
               placeholder="Enter your password"
               className="w-full px-4 py-2 mt-2 bg-[#0d1117] border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-600"
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
 
@@ -108,7 +144,6 @@ const SignUp = () => {
           </button>
         </form>
 
-        {/* Already have an account */}
         <p className="text-sm text-gray-400 text-center mt-4">
           Already have an account?{" "}
           <a href="/login" className="text-blue-500 hover:underline">

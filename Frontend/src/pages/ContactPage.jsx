@@ -1,30 +1,11 @@
 import React from "react";
+import Navbar from "../components/NavBar";
 
 const ContactPage = () => {
   return (
     <div className="bg-[#0d1117] text-white min-h-screen">
-      {/* Header */}
-      <header className="bg-gray-900 p-6 shadow-lg">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <h1 className="text-2xl font-bold">FocusFlow</h1>
-          <nav>
-            <ul className="flex space-x-6">
-              <li>
-                <a href="/" className="hover:underline">
-                  Home
-                </a>
-              </li>
-              <li>
-                <a href="/contact" className="hover:underline">
-                  Contact
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </header>
+      <Navbar page="contact" />
 
-      {/* Hero Section */}
       <section className="py-16 bg-gradient-to-b from-gray-900 via-[#0d1117] to-gray-800 text-center">
         <h2 className="text-4xl font-bold mb-4">Get in Touch</h2>
         <p className="text-gray-300">
@@ -34,12 +15,10 @@ const ContactPage = () => {
         </p>
       </section>
 
-      {/* Contact Form Section */}
       <section className="py-16">
         <div className="max-w-4xl mx-auto px-6">
           <h2 className="text-3xl font-bold mb-8 text-center">Contact Us</h2>
           <div className="grid md:grid-cols-2 gap-12">
-            {/* Contact Info */}
             <div className="space-y-6">
               <div>
                 <h3 className="text-xl font-semibold mb-2">Email Us</h3>
@@ -57,7 +36,6 @@ const ContactPage = () => {
               </div>
             </div>
 
-            {/* Contact Form */}
             <form className="bg-gray-800 p-6 rounded-lg shadow-lg">
               <div className="mb-4">
                 <label
@@ -112,7 +90,6 @@ const ContactPage = () => {
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="bg-gray-900 py-6">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <p className="text-gray-400">
