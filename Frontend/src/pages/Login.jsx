@@ -33,15 +33,12 @@ const LoginPage = () => {
         password,
         selectedRole,
       });
-      console.log(response.data);
 
       if (response.data.student == null) {
-        console.log("no student");
         setIsAuthenticated(true);
         setAuthUser(response.data.creator);
         setRedirect("api/creator/profile");
       } else if (response.data.creator == null) {
-        console.log("no creator");
         setIsAuthenticated(true);
         setAuthUser(response.data.student);
         setRedirect("/addtask");

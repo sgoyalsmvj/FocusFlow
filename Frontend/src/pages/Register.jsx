@@ -26,12 +26,10 @@ const SignUp = () => {
     });
 
     if (response.data.student == null) {
-      console.log("no student");
       setIsAuthenticated(true);
       setAuthUser(response.data.creator);
       setRedirect("/creator/profile");
     } else if (response.data.creator == null) {
-      console.log("no creator");
       setIsAuthenticated(true);
       setAuthUser(response.data.student);
       setRedirect("/addtask");

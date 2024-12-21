@@ -6,7 +6,6 @@ import VideoCard from "../components/VideoCard";
 
 const StudentVideosBrowse = () => {
   const { keywords, taskId } = useParams();
-  console.log(keywords);
   const [videoList, setVideoList] = useState([]);
 
   useEffect(() => {
