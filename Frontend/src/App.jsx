@@ -13,6 +13,8 @@ import ContactPage from "./pages/ContactPage";
 import Dashboard from "./pages/Dashboard";
 import AddTaskPage from "./pages/AddTaskPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import LearnTechPage from "./pages/LearnTechPage";
+import VideoWatchPage from "./pages/VideoWatchPage";
 
 axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 axios.defaults.withCredentials = true;
@@ -35,7 +37,9 @@ function App() {
           />
           <Route path="/video/:taskId/:videoId" element={<VideoPage />} />
           <Route path="/addtask" element={<AddTaskPage />} />
+          <Route path="/learnTechStack" element={<LearnTechPage />} />
         </Route>
+        <Route path="/watchVideo" element={<VideoWatchPage />} />
       </Routes>
     </AuthProvider>
   );

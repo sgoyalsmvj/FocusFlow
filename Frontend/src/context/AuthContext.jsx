@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
 import axios from "axios";
 import PropTypes from "prop-types";
-import { Navigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
@@ -52,7 +51,6 @@ export function AuthProvider({ children }) {
     setIsLoading(true);
     try {
       const res = await axios.post("api/auth/login", credentials);
-      // Handle the specific response structure from your API
       const userData = res.data.creator || res.data.student;
       setAuthUser(userData);
       setIsAuthenticated(true);

@@ -168,6 +168,12 @@ const TechLearningPage = () => {
     navigate("/");
   };
 
+  const handleLearnClick = () => {
+    navigate("/learnTechStack", {
+      state: { selectedTechnologies: selectedTechStacks },
+    });
+  };
+
   const userName = authUser.name;
 
   return (
@@ -270,6 +276,7 @@ const TechLearningPage = () => {
           <div className="flex justify-center mt-10">
             <button
               className={`transform -translate-y-1/2 bg-blue-600 px-4 py-2 rounded hover:bg-blue-500 transition`}
+              onClick={handleLearnClick}
             >
               Start Learning
             </button>
