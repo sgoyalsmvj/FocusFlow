@@ -39,7 +39,7 @@ const LearnTechPage = () => {
         method: "get",
         url: `https://www.googleapis.com/youtube/v3/search`,
         params: {
-          key: "AIzaSyDKXnIFS2ouLKxNGsSI0hhD9ts2kO50Kcc",
+          key: API_KEY,
           q: activeTech,
           type: "video",
           part: "snippet",
