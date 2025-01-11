@@ -61,7 +61,7 @@ export const login = async (req, res) => {
       }
       const token = creator.generateToken();
       const options = {
-        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),  
+        expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         samesite: "none",
         secure: true,
       };
@@ -92,7 +92,7 @@ export const login = async (req, res) => {
   }
 };
 
-export const logout = async (req,res) => {
+export const logout = async (req, res) => {
   try {
     res
       .status(200)
@@ -103,11 +103,13 @@ export const logout = async (req,res) => {
   }
 };
 
-export const getProfile = (req, res) => {
-  if (req.creator) {
-    res.status(200).json(req.creator);
-  } else {
-    res.status(200).json(req.student);
+export const getProfile = async (req, res) => {
+  try {
+    if (!req.creator && !req.student) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    res.status(200).json(req.creator || req.student);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
-

@@ -41,9 +41,7 @@ const VideoPage = () => {
   useEffect(() => {
     if (video) {
       const keywords = video.tags.join(" ");
-      // console.log(keywords)
       fetchSuggestionVideos(keywords);
-      console.log(suggestionVideos);
     }
   }, [video]);
 

@@ -1,37 +1,34 @@
-
 .container {
-    display: flex;
+  display: flex;
 }
 
 .fntStyle {
-    font-size: 2em;
-    letter-spacing: 3px;
-    font-family: monospace;
-    width: 100%;
-    white-space: nowrap;
+  font-size: 2em;
+  letter-spacing: 3px;
+  font-family: monospace;
+  width: 100%;
+  white-space: nowrap;
 }
 
 .text {
-    font-size: 2em;
-    letter-spacing: 3px;
-    font-family: monospace;
-    border-right: 5px solid;
-    width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-    animation: 
-        typing 5s ease  ,
-        cursor .2s infinite alternate;
+  font-size: 2em;
+  letter-spacing: 3px;
+  font-family: monospace;
+  border-right: 5px solid;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  animation: typing 5s ease, cursor 0.2s alternate;
 }
 
 @keyframes cursor {
-    50% { 
-        border-color: transparent;
-    }
+  50% {
+    border-color: transparent;
+  }
 }
 
 @keyframes typing {
-    from { 
-        width: 0;
-    }
+  from {
+    width: 0;
+  }
 }
