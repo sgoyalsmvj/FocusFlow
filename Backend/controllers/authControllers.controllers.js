@@ -105,10 +105,13 @@ export const logout = async (req, res) => {
   }
 };
 
-export const getProfile = (req, res) => {
-  if (req.creator) {
-    res.status(200).json(req.creator);
-  } else {
-    res.status(200).json(req.student);
+export const getProfile = async (req, res) => {
+  try {
+    if (!req.creator && !req.student) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    res.status(200).json(req.creator || req.student);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };

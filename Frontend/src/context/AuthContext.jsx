@@ -1,43 +1,98 @@
-import axios from "axios"; // Import axios for making HTTP requests
 import React, { useState, useEffect, useContext, createContext } from "react";
+import axios from "axios";
+import PropTypes from "prop-types";
 
-// Create a context for authentication
 const AuthContext = createContext();
 
-// Custom hook to use the AuthContext
 export function useAuth() {
   return useContext(AuthContext);
 }
 
-// AuthProvider component to provide authentication state and functions to its children
 export function AuthProvider({ children }) {
-  // State to hold authenticated user data
   const [authUser, setAuthUser] = useState(null);
-  // State to check if the user is logged in
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // useEffect hook to fetch the authenticated user's profile when the component mounts
   useEffect(() => {
-    // Make a GET request to fetch the user's profile
-    axios
-      .get("/auth/profile")
-      .then((res) => {
-        setAuthUser(res.data); // Set the authenticated user's data
-        setIsLoggedIn(true); // Set isLoggedIn to true
-      })
-      .catch((error) => {
-        console.error("Error fetching profile:", error); // Log any errors
-      });
+    const storedUser = sessionStorage.getItem("authUser");
+    if (storedUser) {
+      setAuthUser(JSON.parse(storedUser));
+      setIsAuthenticated(true);
+    }
+    checkAuth();
   }, []);
 
-  // Value to be provided by AuthContext, including states and their setters
+  useEffect(() => {
+    if (authUser && isAuthenticated) {
+      sessionStorage.setItem("authUser", JSON.stringify(authUser));
+    } else {
+      sessionStorage.removeItem("authUser");
+    }
+  }, [authUser, isAuthenticated]);
+
+  const checkAuth = async () => {
+    try {
+      const res = await axios.get("api/auth/profile");
+      setAuthUser(res.data);
+      setIsAuthenticated(true);
+      return true;
+    } catch (error) {
+      setAuthUser(null);
+      setIsAuthenticated(false);
+      sessionStorage.removeItem("authUser");
+      console.error("Error fetching profile:", error);
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const login = async (credentials) => {
+    setIsLoading(true);
+    try {
+      const res = await axios.post("api/auth/login", credentials);
+      const userData = res.data.creator || res.data.student;
+      setAuthUser(userData);
+      setIsAuthenticated(true);
+      return true;
+    } catch (error) {
+      setAuthUser(null);
+      setIsAuthenticated(false);
+      console.error("Login error:", error);
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const logout = async () => {
+    setIsLoading(true);
+    try {
+      await axios.post("api/auth/logout");
+      setAuthUser(null);
+      setIsAuthenticated(false);
+      sessionStorage.removeItem("authUser");
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const value = {
     authUser,
     setAuthUser,
-    isLoggedIn,
-    setIsLoggedIn,
+    isAuthenticated,
+    setIsAuthenticated,
+    isLoading,
+    login,
+    logout,
+    checkAuth,
   };
 
-  // Return the provider component with the value prop
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
+
+AuthProvider.propTypes = {
+  children: PropTypes.node,
+};

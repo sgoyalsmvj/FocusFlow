@@ -1,138 +1,156 @@
-import axios from "axios";
 import React, { useState } from "react";
-import { Navigate } from "react-router-dom";
+import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+import { Navigate } from "react-router-dom";
 
-const Register = () => {
-  // State variables to hold form inputs and redirect status
+const SignUp = () => {
   const [role, setRole] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [redirect, setRedirect] = useState(false);
 
-  // Destructure context methods from AuthContext
-  const { setAuthUser, setIsLoggedIn } = useAuth();
+  const { setAuthUser, setIsAuthenticated } = useAuth();
 
-  // Handle form submission
+  const handleRoleSelection = (selectedRole) => {
+    setRole(selectedRole);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Send a POST request to register endpoint with form data
-    const response = await axios.post("/auth/register", {
+    const response = await axios.post("api/auth/register", {
       name,
       email,
       password,
       role,
     });
 
-    // Check the role of the registered user and set the appropriate state
     if (response.data.student == null) {
-      console.log("no student");
-      setIsLoggedIn(true);
+      setIsAuthenticated(true);
       setAuthUser(response.data.creator);
-      setRedirect("/creator/profile"); // Redirect to creator profile page
+      setRedirect("/creator/profile");
     } else if (response.data.creator == null) {
-      console.log("no creator");
-      setIsLoggedIn(true);
+      setIsAuthenticated(true);
       setAuthUser(response.data.student);
-      setRedirect("/"); // Redirect to landing page
+      setRedirect("/addtask");
     }
   };
 
-  // Handlers for setting the role
-  const creatorRole = (ev) => {
-    ev.preventDefault();
-    setRole("creator");
-  };
-
-  const studentRole = (ev) => {
-    ev.preventDefault();
-    setRole("student");
-  };
-
-  // Redirect to the specified path if redirect state is set
   if (redirect) {
     return <Navigate to={`${redirect}`} />;
   }
 
   return (
-    <div className="text-white text-center flex flex-col justify-center items-center font-mono">
-      <div className="m-20 w-max">
-        <h1 className="text-3xl mb-7">Sign Up To FocusFlow</h1>
+    <div className="flex justify-center items-center min-h-screen bg-[#0d1117]">
+      <div className="bg-[#161b22] p-8 rounded-lg shadow-lg w-full max-w-md border border-gray-700">
+        <h2 className="text-2xl font-bold text-center text-white mb-6">
+          Create Your Account
+        </h2>
 
-        {/* Registration form */}
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col items-start m-5 p-5 rounded-lg font-light h-max w-[350px] bg-[#161b22] border border-gray-700 outline-[1px]"
-        >
-          <label className="my-2">Name</label>
-          <input
-            className="mb-3 w-full rounded-md border border-gray-600 bg-[#0d1117] p-1 focus:border-blue-600 focus:outline-none text-white"
-            type="text"
-            name="name"
-            onChange={(e) => setName(e.target.value)}
-          />
+        <div className="flex justify-between mb-6">
+          <button
+            onClick={() => handleRoleSelection("student")}
+            className={`w-1/2 px-4 py-2 font-semibold border ${
+              role === "student"
+                ? "bg-blue-600 text-white"
+                : "bg-[#0d1117] text-gray-400 hover:bg-gray-800"
+            } rounded-l-lg transition duration-300`}
+          >
+            Student
+          </button>
+          <button
+            onClick={() => handleRoleSelection("creator")}
+            className={`w-1/2 px-4 py-2 font-semibold border ${
+              role === "creator"
+                ? "bg-blue-600 text-white"
+                : "bg-[#0d1117] text-gray-400 hover:bg-gray-800"
+            } rounded-r-lg transition duration-300`}
+          >
+            Creator
+          </button>
+        </div>
 
-          <label className="my-2">Username or Email Address</label>
-          <input
-            className="mb-3 w-full rounded-md border border-gray-600 bg-[#0d1117] p-1 focus:border-blue-600 focus:outline-none text-white"
-            type="text"
-            name="email"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-
-          <label className="my-2">Password</label>
-          <input
-            className="mb-3 w-full rounded-md border border-gray-600 bg-[#0d1117] p-1 focus:border-blue-600 focus:outline-none text-white"
-            type="password"
-            name="password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-
-          <label className="my-2">Role</label>
-          <div className="flex flex-row mb-2 space-x-3 w-full">
-            {/* Button for selecting Creator role */}
-            <button
-              onClick={creatorRole}
-              className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg 
-              focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 
-              dark:bg-gray-600 dark:border-gray-600 dark:placeholder-gray-400 
-              dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 font-mono font-bold text-lg"
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label
+              htmlFor="name"
+              className="block text-sm font-semibold text-gray-400"
             >
-              Creator
-            </button>
-            {/* Button for selecting Student role */}
-            <button
-              onClick={studentRole}
-              className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg 
-              focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 
-              dark:bg-gray-600 dark:border-gray-600 dark:placeholder-gray-400 
-              dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 font-mono font-bold text-lg"
-            >
-              Student
-            </button>
+              Full Name
+            </label>
+            <input
+              type="text"
+              id="name"
+              placeholder="Enter your name"
+              className="w-full px-4 py-2 mt-2 bg-[#0d1117] border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-600"
+              onChange={(e) => setName(e.target.value)}
+            />
           </div>
 
-          {/* Register button */}
+          <div className="mb-4">
+            <label
+              htmlFor="email"
+              className="block text-sm font-semibold text-gray-400"
+            >
+              Email Address
+            </label>
+            <input
+              type="email"
+              id="email"
+              placeholder="Enter your email"
+              className="w-full px-4 py-2 mt-2 bg-[#0d1117] border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-600"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+
+          <div className="mb-4">
+            <label
+              htmlFor="password"
+              className="block text-sm font-semibold text-gray-400"
+            >
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              placeholder="Enter your password"
+              className="w-full px-4 py-2 mt-2 bg-[#0d1117] border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-600"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+
+          <div className="mb-6">
+            <label
+              htmlFor="confirmPassword"
+              className="block text-sm font-semibold text-gray-400"
+            >
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              id="confirmPassword"
+              placeholder="Confirm your password"
+              className="w-full px-4 py-2 mt-2 bg-[#0d1117] border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-600"
+            />
+          </div>
+
           <button
-            className="bg-[#238636] w-full my-3 p-1 font-semibold rounded-md"
             type="submit"
+            className="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-200"
           >
-            Register
+            Sign Up
           </button>
         </form>
 
-        {/* Additional options */}
-        <div className="border border-gray-700 rounded-md m-5 py-5 w-[350px]">
-          <p className="text-blue-500 font-semibold">Sign in with Google</p>
+        <p className="text-sm text-gray-400 text-center mt-4">
           Already have an account?{" "}
-          <a className="font-normal text-blue-500" href="/login">
-            Login
+          <a href="/login" className="text-blue-500 hover:underline">
+            Log In
           </a>
-        </div>
+        </p>
       </div>
     </div>
   );
 };
 
-export default Register;
+export default SignUp;
